@@ -1,0 +1,52 @@
+/* Gemeinsame Kurs-Styles: schlichte Klassen, die alle Beispiele nutzen dürfen. */
+:root {
+  --bg: #f6f7f9;
+  --surface: #ffffff;
+  --text: #1d2330;
+  --muted: #5b6475;
+  --primary: #c3002f;
+  --primary-text: #ffffff;
+  --border: #dde1e8;
+  --ok: #1b7f3b;
+  --warn: #b25e00;
+  --error: #b3261e;
+  font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  color: var(--text);
+  background: var(--bg);
+}
+
+* { box-sizing: border-box; }
+body { margin: 0; }
+a { color: var(--primary); }
+h1, h2, h3 { line-height: 1.2; }
+
+.topbar { display: flex; align-items: center; gap: 1.5rem; padding: 0.75rem 1.5rem; background: var(--text); }
+.topbar a { color: #fff; text-decoration: none; }
+.topbar nav { display: flex; gap: 1rem; }
+.brand { font-weight: 700; font-size: 1.2rem; }
+.container { max-width: 1100px; margin: 0 auto; padding: 1.5rem; }
+
+.card { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 1rem 1.25rem; margin-bottom: 1rem; }
+.grid { display: grid; gap: 1rem; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); }
+.row { display: flex; gap: 0.75rem; align-items: center; flex-wrap: wrap; }
+.muted { color: var(--muted); }
+
+.btn { border: 1px solid var(--border); background: var(--surface); padding: 0.45rem 0.9rem; border-radius: 6px; cursor: pointer; font: inherit; }
+.btn-primary { background: var(--primary); border-color: var(--primary); color: var(--primary-text); }
+.btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+.badge { display: inline-block; padding: 0.1rem 0.5rem; border-radius: 999px; font-size: 0.8rem; background: var(--border); }
+.badge-ok { background: #d8f0df; color: var(--ok); }
+.badge-warn { background: #fde9cc; color: var(--warn); }
+.badge-error { background: #f9d9d6; color: var(--error); }
+
+label { display: block; font-weight: 600; margin: 0.75rem 0 0.25rem; }
+input, select, textarea { font: inherit; padding: 0.4rem 0.6rem; border: 1px solid var(--border); border-radius: 6px; width: 100%; max-width: 420px; }
+.error { color: var(--error); font-size: 0.9rem; margin: 0.25rem 0 0; }
+.loading { color: var(--muted); font-style: italic; }
+
+/* EventHub-Perf: Startseite */
+.hero-text { margin: 1rem 0 1.5rem; }
+.session-row { display: flex; justify-content: space-between; gap: 1rem; align-items: center; }
+.score-high { border-left: 4px solid var(--ok); }
+.score-low { border-left: 4px solid var(--border); }

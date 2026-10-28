@@ -1,0 +1,27 @@
+/* Schlichte EventHub-Styles (Auszug aus den Kurs-Styles). */
+:root {
+  --bg: #f6f7f9;
+  --surface: #ffffff;
+  --text: #1d2330;
+  --muted: #5b6475;
+  --primary: #c3002f;
+  --border: #dde1e8;
+  --ok: #1b7f3b;
+  --warn: #b25e00;
+  font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  color: var(--text);
+  background: var(--bg);
+}
+* { box-sizing: border-box; }
+body { margin: 0; }
+.container { max-width: 1100px; margin: 0 auto; padding: 1.5rem; }
+.card { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 1rem 1.25rem; margin-bottom: 1rem; }
+.grid { display: grid; gap: 1rem; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); }
+.row { display: flex; gap: 0.75rem; align-items: center; flex-wrap: wrap; }
+.muted { color: var(--muted); }
+.btn { border: 1px solid var(--border); background: var(--surface); padding: 0.45rem 0.9rem; border-radius: 6px; cursor: pointer; font: inherit; }
+.btn-primary { background: var(--primary); border-color: var(--primary); color: #fff; }
+.badge { display: inline-block; padding: 0.1rem 0.5rem; border-radius: 999px; font-size: 0.8rem; background: var(--border); }
+.badge-ok { background: #d8f0df; color: var(--ok); }
+.badge-warn { background: #fde9cc; color: var(--warn); }
+.loading { color: var(--muted); font-style: italic; }

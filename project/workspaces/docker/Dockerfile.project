@@ -1,0 +1,24 @@
+# syntax=docker/dockerfile:1
+# Variante für das Kurs-Projekt selbst (Transferprojekt „EventHub Release“, m14).
+# Build-Kontext ist der Ordner project/:
+#   cd output/project
+#   docker build -f workspaces/docker/Dockerfile.project -t eventhub-kurs .
+
+FROM node:24-alpine AS build
+WORKDIR /app
+# Cypress-Binary wird im Image nicht gebraucht
+ENV CYPRESS_INSTALL_BINARY=0
+COPY package.json package-lock.json ./
+RUN npm ci
+COPY angular.json tsconfig.json tsconfig.app.json ./
+COPY public ./public
+COPY src ./src
+RUN npx ng build
+
+FROM nginx:alpine AS runtime
+COPY workspaces/docker/nginx/default.conf /etc/nginx/conf.d/default.conf
+COPY workspaces/docker/runtime/config.template.json /etc/eventhub/config.template.json
+COPY --chmod=755 workspaces/docker/runtime/40-eventhub-config.sh /docker-entrypoint.d/40-eventhub-config.sh
+COPY --from=build /app/dist/project/browser /usr/share/nginx/html
+ENV API_URL=http://localhost:3000
+EXPOSE 8080

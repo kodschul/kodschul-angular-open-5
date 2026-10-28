@@ -1,0 +1,8 @@
+{
+  "title": "Mein EventHub-Dashboard",
+  "widgets": [
+    { "type": "stats", "inputs": { "title": "Auslastung gesamt" } },
+    { "type": "next-session", "inputs": { "track": "Frontend" } },
+    { "type": "favorites", "inputs": { "sessionIds": [3, 6, 7] } }
+  ]
+}

@@ -1,0 +1,107 @@
+# CI-Pipeline für EventHub (Lab 14.1) – Starter mit zwei Lücken (TODO 1, TODO 2).
+# Ablage im eigenen Repo: .github/workflows/ci.yml im Wurzelordner.
+# Annahme: Repo-Wurzel = Kurs-Repo (enthält den Ordner project/).
+# Lokal ausführen (optional, braucht Docker): act push -W .github/workflows/ci.yml
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+# Neuer Push auf denselben Branch bricht den alten Lauf ab
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  # ---------- Stufe 1: Install, Lint, Unit-Tests (Kurs-Projekt) ----------
+  test:
+    name: Lint und Unit-Tests
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: project
+    env:
+      # Unit-Tests brauchen das Cypress-Binary nicht: Download überspringen spart Zeit
+      CYPRESS_INSTALL_BINARY: 0
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: project/package-lock.json
+
+      - run: npm ci
+
+      # Angular 22 bringt kein Lint-Target mit; der Schritt läuft erst nach "ng add angular-eslint"
+      - name: Lint
+        if: hashFiles('project/eslint.config.js') != ''
+        run: npx ng lint
+
+      # TODO 1: Unit-Tests mit Vitest ausführen – einmalig, ohne Watch-Modus
+
+  # ---------- Stufe 2: E2E-Tests mit Cypress (Kurs-Projekt) ----------
+  e2e:
+    name: E2E-Tests (Cypress)
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+
+      # Installiert Abhängigkeiten inkl. Cypress-Binary (mit Cache), startet API und App, wartet, testet headless
+      - uses: cypress-io/github-action@v7
+        with:
+          working-directory: project
+          start: npm run api, npm start
+          wait-on: 'http://localhost:3000/sessions, http://localhost:4200'
+          wait-on-timeout: 180
+
+      - name: Screenshots und Videos bei Fehlern sichern
+        if: failure()
+        uses: actions/upload-artifact@v7
+        with:
+          name: cypress-artefakte
+          path: |
+            project/cypress/screenshots
+            project/cypress/videos
+          if-no-files-found: ignore
+
+  # ---------- Stufe 3: Build mit Budgets und Docker-Image (EventHub-App aus Lab 13.2/13.3) ----------
+  build:
+    name: Build und Docker-Image
+    needs: test
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: project/workspaces/eventhub-perf-fixed
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: project/workspaces/eventhub-perf-fixed/package-lock.json
+
+      - run: npm ci
+
+      # Produktions-Build: bricht ab, wenn ein Budget mit maximumError überschritten wird
+      - name: Build mit Budgets
+        run: npm run build
+
+      # TODO 2: Docker-Image aus Lab 13.3 bauen
+      #         Arbeitsordner project/workspaces, Dockerfile docker/Dockerfile,
+      #         Tag eventhub-web:<Commit-SHA> (Ausdruck: ${{ github.sha }})
+
+      - name: Image-Größe ausgeben
+        run: docker image ls eventhub-web

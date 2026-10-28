@@ -1,0 +1,4 @@
+# Ergebnisse von "cypress run", nicht einchecken
+videos/
+screenshots/
+downloads/

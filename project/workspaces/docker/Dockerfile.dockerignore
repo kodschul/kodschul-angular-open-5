@@ -1,0 +1,14 @@
+# Ignore-Datei nur für docker/Dockerfile (BuildKit sucht <Dockerfile-Name>.dockerignore neben dem Dockerfile).
+# Erlaubt nur, was der Build braucht – alles andere bleibt aus dem Build-Kontext.
+*
+!eventhub-perf/
+!eventhub-perf-fixed/
+!docker/
+
+# Innerhalb der erlaubten Ordner wieder ausschließen
+**/node_modules
+**/dist
+**/.angular
+**/public/img/hero.png
+docker/starter
+docker/playground

@@ -1,0 +1,5 @@
+node_modules/
+dist/
+.angular/
+# vom Skript erzeugt (npm run hero)
+public/img/hero.png

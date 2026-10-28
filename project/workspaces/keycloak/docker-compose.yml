@@ -1,0 +1,13 @@
+# Keycloak für Lab 9.3 – nur für die lokale Übung (Dev-Modus, In-Container-Datenbank, HTTP).
+# Start:  docker compose up        Stopp und alles verwerfen:  docker compose down
+services:
+  keycloak:
+    image: quay.io/keycloak/keycloak:26.8.1 # Stand 28.10.2026, vor Kursbeginn prüfen
+    command: ["start-dev", "--import-realm"] # importiert alle JSON-Dateien aus /opt/keycloak/data/import
+    environment:
+      KC_BOOTSTRAP_ADMIN_USERNAME: admin # Admin-Konsole http://localhost:8080 (nur Kursumgebung)
+      KC_BOOTSTRAP_ADMIN_PASSWORD: admin
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./realm:/opt/keycloak/data/import:ro

@@ -1,0 +1,52 @@
+// Lab 10.1 – Jasmine-Version aus einem Karma-Projekt.
+// Aufgabe: Inhalt nach workshop-stats.spec.ts kopieren und auf Vitest umschreiben.
+// Diese Datei endet auf .txt, damit sie weder gebaut noch als Test ausgeführt wird.
+import { TestBed } from '@angular/core/testing'; // TestBed: Test-Injector von Angular (Lab 10.2); hier nur zum Holen der Services
+import { provideHttpClient } from '@angular/common/http';
+import { firstValueFrom, of } from 'rxjs'; // firstValueFrom: Observable → Promise (erster Wert), damit der Test per await wartet
+import { SessionApi } from '../../shared/api';
+import { Session } from '../../shared/models';
+import { WorkshopStats, warnIfAlmostFull, logSoldOut } from './workshop-stats';
+
+function makeSession(partial: Partial<Session> = {}): Session {
+  return {
+    id: 1, title: 'Testen ohne Tränen', abstract: '', type: 'workshop', level: 'Fortgeschritten',
+    track: 'Testing', speakerId: 4, room: 'Workshop 1', start: '2027-03-11T14:00:00',
+    durationMin: 180, capacity: 20, booked: 10, price: 290, tags: [], ...partial,
+  };
+}
+
+describe('warnIfAlmostFull', () => {
+  it('meldet eine fast volle Session über den Callback', () => {
+    const notify = jasmine.createSpy('notify');
+
+    const warned = warnIfAlmostFull(makeSession({ booked: 19 }), notify);
+
+    expect(warned).toBeTrue();
+    expect(notify).toHaveBeenCalledOnceWith('Testen ohne Tränen: 95 % gebucht');
+  });
+});
+
+describe('logSoldOut', () => {
+  it('schreibt eine Warnung pro ausgebuchter Session', () => {
+    const warn = spyOn(console, 'warn');
+
+    const count = logSoldOut([makeSession({ booked: 20 }), makeSession({ id: 2, booked: 3 })]);
+
+    expect(count).toBe(1);
+    expect(warn).toHaveBeenCalledWith('Ausgebucht: Testen ohne Tränen');
+  });
+});
+
+describe('WorkshopStats', () => {
+  it('zählt die Workshops aus der API-Antwort', async () => {
+    TestBed.configureTestingModule({ providers: [provideHttpClient()] });
+    const api = TestBed.inject(SessionApi);
+    const getSessions = spyOn(api, 'getSessions').and.returnValue(of([makeSession(), makeSession({ id: 2 })]));
+
+    const count = await firstValueFrom(TestBed.inject(WorkshopStats).countWorkshops());
+
+    expect(count).toBe(2);
+    expect(getSessions).toHaveBeenCalledWith({ type: 'workshop' });
+  });
+});

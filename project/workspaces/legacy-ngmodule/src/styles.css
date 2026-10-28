@@ -1,0 +1,18 @@
+/* Schlichte Styles, angelehnt an die Kurs-App */
+:root { font-family: system-ui, sans-serif; color: #1d2330; background: #f6f7f9; }
+body { margin: 0; }
+a { color: #c3002f; }
+.topbar { display: flex; gap: 1.5rem; align-items: center; padding: 0.75rem 1.5rem; background: #1d2330; }
+.topbar a { color: #fff; text-decoration: none; }
+.topbar nav { display: flex; gap: 1rem; }
+.topbar a.active { text-decoration: underline; }
+.brand { font-weight: 700; }
+.container { max-width: 1000px; margin: 0 auto; padding: 1.5rem; }
+.grid { display: grid; gap: 1rem; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); }
+.card { background: #fff; border: 1px solid #dde1e8; border-radius: 8px; padding: 1rem; }
+.muted { color: #5b6475; }
+.loading { color: #5b6475; font-style: italic; }
+.badge { display: inline-block; padding: 0.1rem 0.5rem; border-radius: 999px; font-size: 0.8rem; }
+.badge-ok { background: #d8f0df; color: #1b7f3b; }
+.badge-warn { background: #fde9cc; color: #b25e00; }
+.badge-error { background: #f9d9d6; color: #b3261e; }

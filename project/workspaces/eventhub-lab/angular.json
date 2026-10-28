@@ -1,0 +1,38 @@
+{
+  "$schema": "../../node_modules/@angular/cli/lib/config/schema.json",
+  "version": 1,
+  "cli": { "packageManager": "npm", "analytics": false },
+  "newProjectRoot": "projects",
+  "projects": {
+    "eventhub-lab": {
+      "projectType": "application",
+      "root": "",
+      "sourceRoot": "src",
+      "prefix": "eh",
+      "architect": {
+        "build": {
+          "builder": "@angular/build:application",
+          "options": {
+            "browser": "src/main.ts",
+            "tsConfig": "tsconfig.json",
+            "styles": ["src/styles.css"]
+          },
+          "configurations": {
+            "production": { "outputHashing": "all" },
+            "development": { "optimization": false, "extractLicenses": false, "sourceMap": true }
+          },
+          "defaultConfiguration": "production"
+        },
+        "serve": {
+          "builder": "@angular/build:dev-server",
+          "options": { "port": 4201 },
+          "configurations": {
+            "production": { "buildTarget": "eventhub-lab:build:production" },
+            "development": { "buildTarget": "eventhub-lab:build:development" }
+          },
+          "defaultConfiguration": "development"
+        }
+      }
+    }
+  }
+}

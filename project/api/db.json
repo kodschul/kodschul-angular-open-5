@@ -1,0 +1,32 @@
+{
+  "users": [
+    { "id": 1, "email": "admin@eventhub.test", "password": "admin123", "name": "Alex Admin", "role": "admin" },
+    { "id": 2, "email": "user@eventhub.test", "password": "user123", "name": "Uli User", "role": "user" }
+  ],
+  "speakers": [
+    { "id": 1, "name": "Mara Lindqvist", "company": "Nordlicht Software", "bio": "Baut seit zehn Jahren Angular-Frontends für Logistikplattformen und begleitet Teams bei Migrationen." },
+    { "id": 2, "name": "Jonas Petrović", "company": "Kranich Labs", "bio": "Schwerpunkt reaktive Architekturen mit RxJS und Signals, Maintainer mehrerer Open-Source-Libraries." },
+    { "id": 3, "name": "Aylin Demir", "company": "Hafenwerk IT", "bio": "Security-Engineer mit Fokus auf OAuth 2.0, OpenID Connect und sichere Single Page Applications." },
+    { "id": 4, "name": "Tobias Brandt", "company": "Brandt & Partner", "bio": "Testautomatisierung von Unit bis E2E; hält Testpyramiden für unterschätzt." },
+    { "id": 5, "name": "Sofia Marquez", "company": "Polaris Digital", "bio": "Frontend-Architektin für Micro-Frontends und Monorepos in Konzernumgebungen." },
+    { "id": 6, "name": "Henrik Vogt", "company": "Ostwind Systems", "bio": "Performance-Optimierung, Core Web Vitals und Auslieferung über Container-Pipelines." }
+  ],
+  "sessions": [
+    { "id": 1, "title": "Angular heute: Standalone, Signals und zoneless", "abstract": "Überblick über den aktuellen Stand von Angular und was sich gegenüber der NgModule-Ära geändert hat.", "type": "talk", "level": "Einsteiger", "track": "Frontend", "speakerId": 1, "room": "Saal A", "start": "2027-03-10T09:30:00", "durationMin": 45, "capacity": 300, "booked": 214, "price": 0, "tags": ["angular", "signals", "standalone"] },
+    { "id": 2, "title": "Migration ohne Stillstand", "abstract": "Wie große Angular-Anwendungen schrittweise auf Standalone und Control Flow umgestellt werden.", "type": "talk", "level": "Fortgeschritten", "track": "Architektur", "speakerId": 1, "room": "Saal B", "start": "2027-03-10T10:30:00", "durationMin": 45, "capacity": 150, "booked": 149, "price": 0, "tags": ["angular", "migration"] },
+    { "id": 3, "title": "RxJS-Operatoren, die wirklich zählen", "abstract": "switchMap, concatMap, exhaustMap und mergeMap im direkten Vergleich mit Marble-Diagrammen.", "type": "talk", "level": "Fortgeschritten", "track": "Frontend", "speakerId": 2, "room": "Saal A", "start": "2027-03-10T11:30:00", "durationMin": 45, "capacity": 300, "booked": 260, "price": 0, "tags": ["rxjs", "operatoren"] },
+    { "id": 4, "title": "Signals und Observables im Team", "abstract": "Wann Zustand ein Signal ist und wann ein Ereignisstrom: Entscheidungsregeln aus echten Projekten.", "type": "talk", "level": "Fortgeschritten", "track": "Frontend", "speakerId": 2, "room": "Saal C", "start": "2027-03-10T13:30:00", "durationMin": 45, "capacity": 120, "booked": 77, "price": 0, "tags": ["signals", "rxjs"] },
+    { "id": 5, "title": "State Management mit NgRx", "abstract": "Klassischer Store und Signal Store an derselben Fachdomäne verglichen.", "type": "workshop", "level": "Experte", "track": "Architektur", "speakerId": 5, "room": "Workshop 1", "start": "2027-03-11T09:00:00", "durationMin": 180, "capacity": 24, "booked": 18, "price": 290, "tags": ["ngrx", "state"] },
+    { "id": 6, "title": "Login richtig gemacht: OAuth 2.0 und OIDC", "abstract": "Authorization Code Flow mit PKCE, Tokens im Browser und das Backend-for-Frontend-Muster.", "type": "workshop", "level": "Fortgeschritten", "track": "Security", "speakerId": 3, "room": "Workshop 2", "start": "2027-03-11T09:00:00", "durationMin": 180, "capacity": 20, "booked": 20, "price": 290, "tags": ["security", "oauth", "oidc"] },
+    { "id": 7, "title": "Testen ohne Tränen", "abstract": "Vitest, Komponententests und Marble-Tests für Streams in einer bestehenden Codebasis einführen.", "type": "workshop", "level": "Fortgeschritten", "track": "Testing", "speakerId": 4, "room": "Workshop 1", "start": "2027-03-11T14:00:00", "durationMin": 180, "capacity": 24, "booked": 9, "price": 290, "tags": ["testing", "vitest"] },
+    { "id": 8, "title": "E2E-Tests, die nicht flackern", "abstract": "Stabile Selektoren, abgefangene Netzwerkanfragen und schnelle Logins in Cypress.", "type": "talk", "level": "Fortgeschritten", "track": "Testing", "speakerId": 4, "room": "Saal C", "start": "2027-03-10T14:30:00", "durationMin": 45, "capacity": 120, "booked": 64, "price": 0, "tags": ["testing", "cypress", "e2e"] },
+    { "id": 9, "title": "Micro-Frontends: Wann sie sich lohnen", "abstract": "Native Federation, Web Components und Monorepos im Vergleich, mit klaren Entscheidungskriterien.", "type": "talk", "level": "Experte", "track": "Architektur", "speakerId": 5, "room": "Saal B", "start": "2027-03-10T15:30:00", "durationMin": 45, "capacity": 150, "booked": 133, "price": 0, "tags": ["architektur", "microfrontends"] },
+    { "id": 10, "title": "Schnell ausgeliefert: Performance und Container", "abstract": "Lighthouse-Werte verstehen, Bundles verkleinern und Angular-Apps mit nginx im Container betreiben.", "type": "workshop", "level": "Fortgeschritten", "track": "Architektur", "speakerId": 6, "room": "Workshop 2", "start": "2027-03-11T14:00:00", "durationMin": 180, "capacity": 20, "booked": 11, "price": 290, "tags": ["performance", "docker"] },
+    { "id": 11, "title": "Sichere Angular-Apps: XSS, CSRF und Tokens", "abstract": "Welche Schutzmechanismen Angular mitbringt und welche Entscheidungen beim Team liegen.", "type": "talk", "level": "Einsteiger", "track": "Security", "speakerId": 3, "room": "Saal A", "start": "2027-03-10T16:30:00", "durationMin": 45, "capacity": 300, "booked": 98, "price": 0, "tags": ["security", "xss"] },
+    { "id": 12, "title": "Formulare mit Signal Forms", "abstract": "Formularmodelle als Signals, Schema-Validierung und der Vergleich mit Reactive Forms.", "type": "talk", "level": "Einsteiger", "track": "Frontend", "speakerId": 1, "room": "Saal C", "start": "2027-03-10T09:30:00", "durationMin": 45, "capacity": 120, "booked": 41, "price": 0, "tags": ["forms", "signals"] }
+  ],
+  "registrations": [
+    { "id": 1, "name": "Kim Berger", "email": "kim.berger@beispiel-firma.de", "company": "Beispiel Firma GmbH", "tickets": 1, "workshopIds": [5], "createdAt": "2027-01-15T10:00:00.000Z" }
+  ],
+  "favorites": {}
+}

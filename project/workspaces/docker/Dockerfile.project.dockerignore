@@ -1,0 +1,9 @@
+# Ignore-Datei nur für workspaces/docker/Dockerfile.project (Kontext: project/)
+**/node_modules
+**/dist
+**/.angular
+cypress/videos
+cypress/screenshots
+workspaces/*
+!workspaces/docker/
+workspaces/docker/playground
