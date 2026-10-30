@@ -46,7 +46,7 @@ flowchart LR
   T --> P["beliebige HTML-Seite<br/>(CMS, React, Vue)"]
 ```
 
-Der Workspace `output/project/workspaces/eventhub-elements/` (erstellt mit `ng new … --minimal`, danach `npm install @angular/elements`) registriert das Element in `src/main.ts`:
+Der Workspace `project/workspaces/eventhub-elements/` (erstellt mit `ng new … --minimal`, danach `npm install @angular/elements`) registriert das Element in `src/main.ts`:
 
 ```ts
 import { provideBrowserGlobalErrorListeners } from '@angular/core';

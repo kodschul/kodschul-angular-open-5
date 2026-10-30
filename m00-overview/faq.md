@@ -23,7 +23,7 @@ Neue Apps laufen seit v21 ohne Zone.js. Bestandsprojekte können Zone.js weiter 
 In einer zoneless App mit `OnPush` erfährt Angular nichts von einer Zuweisung an ein normales Feld. Lösung: `async`-Pipe, ein Signal oder `toSignal` (Lab 1.1, Lab 6.2).
 
 **Sind `*ngIf` und `@Input` jetzt verboten?**
-Nein, sie funktionieren weiter, sind aber als veraltet markiert (Strukturdirektiven seit v20). Für neuen Code gelten `@if`/`@for` und `input()`; für Bestand gibt es Migrations-Schematics (Lab 3.1, Lab 6.3).
+Nein, beide funktionieren weiter. `*ngIf`, `*ngFor` und `*ngSwitch` sind seit v20 als veraltet markiert; `@Input` ist nicht veraltet, für neuen Code empfiehlt Angular aber `input()`. Für Bestand gibt es Migrations-Schematics (Lab 3.1, Lab 6.3).
 
 **Ersetzen Signals RxJS?**
 Nein. Signals halten Zustand, RxJS beschreibt Ereignisse über die Zeit (Suche, Entprellung, Abbruch). Beide arbeiten über `toSignal`, `toObservable` und `rxResource` zusammen (Lab 6.2).

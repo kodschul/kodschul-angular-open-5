@@ -35,7 +35,7 @@ export class OidcPage {
     inject(PublicEventsService)
       .registerForEvents()
       .pipe(filter((event) => event.type === EventTypes.ConfigLoadingFailed), takeUntilDestroyed())
-      .subscribe(() => this.error.set('Keycloak nicht erreichbar (http://localhost:8080). Läuft docker compose up?'));
+      .subscribe(() => this.error.set('Keycloak nicht erreichbar: authority in oidc.config.ts prüfen (lokal: läuft docker compose up?).'));
 
     // TODO 5: checkAuth() aufrufen; wenn angemeldet, getPayloadFromIdToken() in idTokenClaims schreiben;
     //         bei Fehler (Keycloak nicht erreichbar) einen Hinweis in error setzen

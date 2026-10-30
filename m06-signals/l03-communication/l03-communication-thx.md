@@ -43,7 +43,7 @@ Setter, die von der Reihenfolge der Inputs abhängen, abgeleitete Felder, die ni
 
 | Zweck | Klassisch (Lab 1.2) | Signal-API |
 | --- | --- | --- |
-| Eingabe | `@Input() speaker!: Speaker` | `speaker = input.required<Speaker>()` |
+| Eingabe | `@Input({ required: true }) speaker!: Speaker` | `speaker = input.required<Speaker>()` |
 | Eingabe mit Standard | `@Input() showBio = false` | `showBio = input(false)` |
 | Umwandlung | `@Input({ transform: booleanAttribute })` | `input(false, { transform: booleanAttribute })` |
 | Ereignis | `@Output() contact = new EventEmitter<Speaker>()` | `contact = output<Speaker>()` |
@@ -180,7 +180,7 @@ Die drei Schematics sind in `@angular/core` 22.2.3 enthalten (`schematics/collec
 | Symptom | Ursache | Lösung |
 | --- | --- | --- |
 | `Property 'set' does not exist on type 'InputSignal<…>'` | `input()` in der Kind-Komponente beschrieben | `model()` verwenden oder Wert per `output()` melden |
-| Template zeigt nichts, kein Fehler | `session.title` statt `session().title` | Signal mit `()` lesen |
+| Compiler: `Property 'title' does not exist on type 'InputSignal<Session>'` | `session.title` statt `session().title` im Template | Signal mit `()` lesen |
 | Header-Zähler bleibt stehen | Service-Feld ist kein Signal, Header ist `OnPush` | Zustand als `signal`, Zähler als `computed` |
 | `NG0950: Input is required but no value is available yet` | `input.required()` im Konstruktor gelesen | erst im Template, in `computed` oder ab `ngOnInit` lesen |
 | `<app-session-card compact />` meldet Typfehler | `input<boolean>()` ohne `transform` | `transform: booleanAttribute` |

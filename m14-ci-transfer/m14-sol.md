@@ -1,6 +1,6 @@
 # Transferprojekt „EventHub Release“ – Lösung
 
-Referenz für den Kern des Features: `output/project/src/app/examples/m14-ci-transfer/transfer/` (Ereignisse, `joinWaitlist`, Store, Validator, Guard, Seite, Marble- und Store-Test). Im Browser: `/examples/m14-ci-transfer/transfer/waitlist/6`. In der Übung liegt derselbe Code unter `src/app/features/waitlist/` und die Route unter `/waitlist/:sessionId`.
+Referenz für den Kern des Features: `project/src/app/examples/m14-ci-transfer/transfer/` (Ereignisse, `joinWaitlist`, Store, Validator, Guard, Seite, Marble- und Store-Test). Im Browser: `/examples/m14-ci-transfer/transfer/waitlist/6`. In der Übung liegt derselbe Code unter `src/app/features/waitlist/` und die Route unter `/waitlist/:sessionId`.
 
 ```mermaid
 flowchart LR
@@ -336,7 +336,7 @@ Bewusst offen: Nachrücken bei frei werdenden Plätzen (Admin-Funktion), Benachr
 **Container:** `workspaces/docker/Dockerfile.project` baut das Kurs-Projekt (Kontext `project/`, Ausgabe `dist/project/browser`) mit derselben nginx-Konfiguration wie Lab 13.3:
 
 ```bash
-cd output/project
+cd project
 docker build -f workspaces/docker/Dockerfile.project -t eventhub-kurs .
 docker run --rm -p 8080:8080 eventhub-kurs
 curl -i http://localhost:8080/waitlist/6     # 200, index.html (SPA-Fallback)

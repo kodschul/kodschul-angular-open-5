@@ -5,8 +5,8 @@
 
 ## Vorbereitung
 
-- Terminal 1 im Ordner `output/project/`: `npm run api`.
-- Terminal 2 im Ordner `output/project/`: `npm start`.
+- Terminal 1 im Ordner `project/`: `npm run api`.
+- Terminal 2 im Ordner `project/`: `npm start`.
 - Arbeitsdatei: `src/app/playground/playground.ts`
 - Starter: `src/app/starters/m08-l03-dynamic-components.ts`
 - Fertige Widgets (nicht ändern): `src/app/examples/m08-advanced-routing/l03-dynamic-components/widgets/` mit `stats-widget.ts` (Input `title`), `next-session-widget.ts` (Input `track`), `favorites-widget.ts` (Input `sessionIds`), `unknown-widget.ts` (ohne Inputs)

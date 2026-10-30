@@ -49,7 +49,7 @@ Eine Lint-Regel: Projekte bekommen Tags wie `type:ui`, und `@nx/enforce-module-b
 
 ## Aufbau des Workspace `nx-eventhub`
 
-Der Workspace liegt unter `output/project/workspaces/nx-eventhub/` und wurde so erzeugt (Nx 24.0.2, Stand: 28.10.2026):
+Der Workspace liegt unter `project/workspaces/nx-eventhub/` und wurde so erzeugt (Nx 24.0.2, Stand: 28.10.2026):
 
 ```bash
 npx create-nx-workspace@latest nx-eventhub --preset=angular-monorepo --appName=eventhub \
@@ -91,8 +91,8 @@ import { Session } from '@nx-eventhub/models';          // Alias aus tsconfig.ba
 
 | Befehl | Wirkung |
 | --- | --- |
-| `npx nx g @nx/angular:library libs/shared/ui --tags=type:ui,scope:shared --prefix=ui` | Angular-Library mit Test-Setup, Alias `@nx-eventhub/ui`, Tags |
-| `npx nx g @nx/angular:component libs/shared/ui/src/lib/rating/rating` | Komponente in einer Library |
+| `npx nx g @nx/angular:library libs/speakers/feature-list --tags=type:feature,scope:speakers --prefix=sp` | Angular-Library mit Test-Setup, Tags und Präfix; Name und Alias (`@nx-eventhub/feature-list`) ergeben sich aus dem letzten Ordner |
+| `npx nx g @nx/angular:component libs/speakers/feature-list/src/lib/speaker-list/speaker-list` | Komponente in einer Library |
 | `npx nx serve eventhub` | Dev-Server der App |
 | `npx nx build eventhub` | Produktions-Build nach `dist/apps/eventhub` |
 | `npx nx test ui` | Tests eines Projekts |
@@ -139,10 +139,10 @@ Die Regel steht in `eslint.config.mjs` im Workspace-Root:
 }],
 ```
 
-Tags stehen in der `project.json` des Projekts (`"tags": ["type:ui", "scope:shared"]`). Ein `HttpClient` in der ui-Library meldet `npx nx lint ui` so:
+Tags stehen in der `project.json` des Projekts (`"tags": ["type:ui", "scope:shared"]`). Ein `HttpClient` in einer Komponente einer ui-Library meldet `npx nx lint ui` so:
 
 ```text
-libs/shared/ui/src/lib/session-card/session-card.ts
+libs/shared/ui/src/lib/speaker-avatar/speaker-avatar.ts
   2:1  error  A project tagged with "type:ui" is not allowed to import "@angular/common/http"  @nx/enforce-module-boundaries
 ```
 
@@ -177,7 +177,7 @@ Nx read the output from the cache instead of running the command for 2 out of 2 
 | Lint: `A project tagged with "type:ui" is not allowed to import …` | Modulgrenze verletzt | Code in passende Library (z. B. data-access) verschieben |
 | `'ui-session-card' is not a known element` | Selektor nach dem Verschieben nicht angepasst oder Komponente nicht in `imports` | Selektor und `imports` der nutzenden Komponente prüfen |
 | `affected` listet alle Projekte | Änderung an `package.json`, `nx.json` oder `tsconfig.base.json` betrifft alle | erwartet; sonst `--files` zum Eingrenzen |
-| `ng new` meldet „not available … inside a workspace“ | Befehl im Kursprojekt-Ordner ausgeführt | neue Workspaces außerhalb von `output/project/` anlegen |
+| `ng new` meldet „not available … inside a workspace“ | Befehl im Kursprojekt-Ordner ausgeführt | neue Workspaces außerhalb von `project/` anlegen |
 
 ## Vertiefung
 

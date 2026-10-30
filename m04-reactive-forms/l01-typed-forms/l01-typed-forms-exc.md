@@ -5,8 +5,8 @@
 
 ## Vorbereitung
 
-- Terminal 1 im Ordner `output/project/`: `npm run api`.
-- Terminal 2 im Ordner `output/project/`: `npm start`.
+- Terminal 1 im Ordner `project/`: `npm run api`.
+- Terminal 2 im Ordner `project/`: `npm start`.
 - Arbeitsdatei: `src/app/playground/playground.ts`
 - Starter: `src/app/starters/m04-l01-typed-forms.ts` (Formular mit `new FormGroup`, Anzeige, `send()` für den POST sind fertig; der Workshop-Bereich im Template ist vorbereitet und auskommentiert)
 - Browser: http://localhost:4200/playground, DevTools mit Tab „Console“

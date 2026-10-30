@@ -6,8 +6,8 @@
 ## Vorbereitung
 
 - Docker Desktop oder Podman läuft: `docker version` zeigt „Client“ und „Server“.
-- Terminal 1 im Ordner `output/project/`: `npm run api` (Mock-API auf Port 3000).
-- Terminal 2 im Ordner `output/project/workspaces/` (alle Befehle unten laufen dort).
+- Terminal 1 im Ordner `project/`: `npm run api` (Mock-API auf Port 3000).
+- Terminal 2 im Ordner `project/workspaces/` (alle Befehle unten laufen dort).
 - Gebaut wird die App aus `workspaces/eventhub-perf-fixed/` (Stand nach Lab 13.2).
 - Starter: `workspaces/docker/starter/Dockerfile` und `workspaces/docker/starter/nginx/default.conf`.
 - Vorgegeben: `workspaces/docker/runtime/config.template.json` und `40-eventhub-config.sh`.

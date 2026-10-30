@@ -96,16 +96,16 @@ sequenceDiagram
 
 ## Lesen, nicht vertrauen
 
-Header und Payload sind Base64URL: Base64 mit `-` und `_` statt `+` und `/`, ohne `=` am Ende. Dekodieren im Browser:
+Header und Payload sind Base64URL: Base64 mit `-` und `_` statt `+` und `/`, ohne `=` am Ende. Dekodieren in Node.js (aus dem Skript `decode-jwt.mjs` der Übung):
 
-```ts
-// src/app/examples/m09-security/l01-tokens/jwt.ts (Auszug)
-export function decodeJwtPart<T>(part: string): T {
-  const base64 = part.replace(/-/g, '+').replace(/_/g, '/');       // Base64URL -> Base64
-  const bytes = Uint8Array.from(atob(base64), (c) => c.charCodeAt(0));
-  return JSON.parse(new TextDecoder().decode(bytes)) as T;         // UTF-8, Umlaute korrekt
-}
+```js
+// src/app/examples/m09-security/l01-tokens/decode-jwt.mjs (Auszug)
+const [header, payload, signature] = accessToken.split('.');               // drei Teile
+const decode = (part) => JSON.parse(Buffer.from(part, 'base64url').toString('utf8'));
+console.log(decode(payload));                                              // { sub: '2', email: …, exp: … }
 ```
+
+Im Browser gibt es kein `Buffer`. Dort sind drei Schritte nötig: Base64URL-Zeichen in Base64 zurückwandeln (`-` → `+`, `_` → `/`), mit `atob` dekodieren, mit `JSON.parse` in ein Objekt wandeln. `atob` liefert einzelne Bytes; für Umlaute wandelt `TextDecoder` sie in UTF-8-Text.
 
 Gegenprobe aus dem Beispiel `/examples/m09-security/l01-tokens`: Die Payload wird mit `"role": "admin"` neu kodiert, die Signatur bleibt.
 

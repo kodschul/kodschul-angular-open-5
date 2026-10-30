@@ -1,14 +1,15 @@
 # Lab 12.2 – Übung: Micro-Frontend mit Native Federation
 
 **Dauer:** ca. 27 Minuten (inkl. 5 Minuten Debrief)
-**Ändert die EventHub-Projektbasis?** Nein — die Übung arbeitet in `output/project/workspaces/federation-admin/` (Remote) und `output/project/workspaces/federation-host/` (Host).
+**Ändert die EventHub-Projektbasis?** Nein — die Übung arbeitet in `project/workspaces/federation-admin/` (Remote) und `project/workspaces/federation-host/` (Host).
 
 ## Vorbereitung
 
 - Kurs-App (`npm start`, Port 4200) beenden: Der Host nutzt Port 4200.
-- Terminal 1 im Ordner `output/project/`: `npm run api` (Mock-API auf Port 3000).
-- Terminal 2 im Ordner `output/project/workspaces/federation-admin/`: `npm install`.
-- Terminal 3 im Ordner `output/project/workspaces/federation-host/`: `npm install`.
+- Läuft noch der Dev-Server aus `workspaces/eventhub-lab/` (Lab 8.1–9.3, Port 4201), ihn ebenfalls beenden: Der Remote nutzt Port 4201.
+- Terminal 1 im Ordner `project/`: `npm run api` (Mock-API auf Port 3000).
+- Terminal 2 im Ordner `project/workspaces/federation-admin/`: `npm install`.
+- Terminal 3 im Ordner `project/workspaces/federation-host/`: `npm install`.
 - Ausgangszustand: Der Remote gibt `./routes` frei, der Host lädt sie unter `/admin`.
 
 ## Aufgaben

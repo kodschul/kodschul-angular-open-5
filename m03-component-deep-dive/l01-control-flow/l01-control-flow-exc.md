@@ -5,8 +5,8 @@
 
 ## Vorbereitung
 
-- Terminal 1 im Ordner `output/project/`: `npm run api` (Mock-API auf Port 3000).
-- Terminal 2 im Ordner `output/project/`: `npm start` (App auf Port 4200).
+- Terminal 1 im Ordner `project/`: `npm run api` (Mock-API auf Port 3000).
+- Terminal 2 im Ordner `project/`: `npm start` (App auf Port 4200).
 - Arbeitsdatei: `src/app/playground/playground.ts`
 - Starter: `src/app/starters/m03-l01-control-flow.ts`
 - Browser: http://localhost:4200/playground

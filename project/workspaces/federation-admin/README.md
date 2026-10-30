@@ -11,7 +11,7 @@ npx ng add @angular-architects/native-federation --project federation-admin --po
 ## Start
 
 ```bash
-# Mock-API im Kursprojekt (output/project/)
+# Mock-API im Kursprojekt (project/)
 npm run api
 
 # in diesem Ordner

@@ -26,6 +26,23 @@ Das Erste ist ein Ereignis (was passiert ist), das Zweite ein Befehl bzw. eine F
 - Der NgRx Store hält den Zustand an einer Stelle und ändert ihn nur über Actions und Reducer.
 - Komponenten lesen per Selector (als Signal) und melden Ereignisse per `dispatch`.
 
+## NgRx auf einen Blick
+
+- **Problem:** Viele Komponenten lesen und ändern denselben Zustand; niemand sieht mehr, wer wann was geändert hat.
+- **Bild:** Ein Kassenbuch. Niemand radiert im Kontostand; jede Buchung (Action) wird mit Namen eingetragen, der Stand (State) ergibt sich aus allen Buchungen der Reihe nach (Reducer).
+- **Definition:** NgRx ist eine Sammlung von Bibliotheken für Zustand in Angular-Apps. Das Paket `@ngrx/store` beschreibt sich selbst als „RxJS powered Redux for Angular apps“ (`package.json` von `@ngrx/store` 22.0.1, Stand 30.10.2026).
+- **Herkunft:** Redux ist ein Muster aus der React-Welt: ein zentraler Zustand, Änderungen nur über benannte Ereignisse, eine reine Funktion berechnet den neuen Zustand. NgRx überträgt es auf Angular und RxJS.
+- **Heute:** NgRx 22 ist aktuell (ngrx.io, Versionsauswahl, abgerufen am 30.10.2026). Zum klassischen Store kam der Signal Store (`@ngrx/signals`, Lab 7.4) mit eigenem Events-Plugin (Lab 7.5).
+
+| Paket | Zweck | Im Kurs |
+| --- | --- | --- |
+| `@ngrx/store` | Store, Actions, Reducer, Selectors | Lab 7.2 |
+| `@ngrx/store-devtools` | Anbindung an die Browser-Erweiterung Redux DevTools | Lab 7.2 |
+| `@ngrx/effects` | Seiteneffekte (HTTP, Speicher) außerhalb von Komponente und Reducer | Lab 7.3 |
+| `@ngrx/signals` | Signal Store, Entities, Events-Plugin | Lab 7.4–7.5 |
+
+Typische Einsätze: große Apps mit vielen Teams, Admin-Oberflächen mit nachvollziehbaren Änderungen, Bestandsprojekte, die seit Jahren NgRx nutzen.
+
 ## Begriffe
 
 | Begriff | Bedeutung |

@@ -61,7 +61,7 @@ flowchart LR
 
 ## Aufbau eines Workflows
 
-Auszug aus der Vorlage `output/project/workspaces/ci/starter/ci.yml`:
+Auszug aus der Vorlage `project/workspaces/ci/starter/ci.yml`:
 
 ```yaml
 name: CI
@@ -104,7 +104,7 @@ jobs:
 | `if: failure()` | Schritt nur, wenn ein vorheriger Schritt scheiterte |
 | `${{ github.sha }}` | Commit-Hash, z. B. als Image-Tag |
 
-Versionen der Actions: `actions/checkout@v7`, `actions/setup-node@v7`, `cypress-io/github-action@v7`, `actions/upload-artifact@v7` (Stand 28.10.2026, `prüfen`).
+Versionen der Actions: `actions/checkout@v7`, `actions/setup-node@v7`, `cypress-io/github-action@v7`, `actions/upload-artifact@v7`, `nrwl/nx-set-shas@v5` (Stand 30.10.2026, geprüft gegen die Releases der jeweiligen GitHub-Repos).
 
 ## E2E mit Cypress in CI
 

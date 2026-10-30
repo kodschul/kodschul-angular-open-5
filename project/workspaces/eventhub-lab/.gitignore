@@ -1,0 +1,6 @@
+# Build-Ausgabe und Cache von ng build / ng serve in diesem Workspace
+/dist
+/.angular
+# Abhängigkeiten kommen aus project/node_modules; eigene node_modules nie einchecken
+/node_modules
+.DS_Store

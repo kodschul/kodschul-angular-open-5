@@ -5,8 +5,8 @@
 
 ## Vorbereitung
 
-- Terminal 1 im Ordner `output/project/`: `npm run api`.
-- Terminal 2 im Ordner `output/project/`: `npm start`.
+- Terminal 1 im Ordner `project/`: `npm run api`.
+- Terminal 2 im Ordner `project/`: `npm start`.
 - Arbeitsdatei: `src/app/playground/playground.ts`
 - Starter: `src/app/starters/m04-l03-custom-control.ts` (Anmeldeformular aus Lab 4.2 mit den Validatoren aus `src/app/examples/m04-reactive-forms/l02-validators/registration-validators.ts`, dazu ein `TicketCounter` ohne Formular-Anbindung)
 - Browser: http://localhost:4200/playground

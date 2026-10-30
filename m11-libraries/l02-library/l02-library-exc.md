@@ -1,12 +1,12 @@
 # Lab 11.2 – Übung: Angular Library bauen und veröffentlichen
 
 **Dauer:** ca. 17 Minuten
-**Ändert die EventHub-Projektbasis?** Nein — die Übung arbeitet in `output/project/workspaces/eventhub-ui-lib/` (Library) und `output/project/workspaces/eventhub-ui-consumer/` (zweite App).
+**Ändert die EventHub-Projektbasis?** Nein — die Übung arbeitet in `project/workspaces/eventhub-ui-lib/` (Library) und `project/workspaces/eventhub-ui-consumer/` (zweite App).
 
 ## Vorbereitung
 
-- Terminal 1 im Ordner `output/project/workspaces/eventhub-ui-lib/`: `npm install`.
-- Terminal 2 im Ordner `output/project/workspaces/eventhub-ui-consumer/`: `npm install`.
+- Terminal 1 im Ordner `project/workspaces/eventhub-ui-lib/`: `npm install`.
+- Terminal 2 im Ordner `project/workspaces/eventhub-ui-consumer/`: `npm install`.
 - Library: `projects/eventhub-ui/` mit `SessionBadge` (aus Lab 3.3) und `TicketCounter` (aus Lab 4.3).
 - Zweite App: `eventhub-ui-consumer/src/app/app.ts` mit zwei `TODO Lab 11.2`-Kommentaren; Dev-Server auf http://localhost:4220.
 
@@ -35,7 +35,7 @@
 ## Erweiterung
 
 - Lege einen Secondary Entry Point `eventhub-ui/testing` mit einer Funktion `fakeSession()` an, baue und prüfe, dass `dist/eventhub-ui/` einen zweiten Ordner bzw. ein zweites FESM-Modul enthält.
-- Lege außerhalb von `output/project/` einen eigenen, leeren Library-Workspace an (`npx @angular/cli@22 new my-ui --no-create-application`, danach `npx ng generate library my-ui`) und vergleiche die erzeugten Dateien mit `eventhub-ui-lib`.
+- Lege außerhalb von `project/` einen eigenen, leeren Library-Workspace an (`npx @angular/cli@22 new my-ui --no-create-application`, danach `npx ng generate library my-ui`) und vergleiche die erzeugten Dateien mit `eventhub-ui-lib`.
 
 ## Fallback
 

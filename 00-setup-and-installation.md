@@ -17,7 +17,7 @@ Stand: 28.10.2026 (Angular 22.2, NgRx 22). Versionen vor Kursbeginn prüfen.
 | Git | aktuell | `git --version` | Tag 1 |
 | Docker Desktop oder Podman | aktuell, optional | `docker version` | Tag 3 (Lab 9.3), Tag 4 (Lab 13.3) |
 | Netzzugang | `registry.npmjs.org` | `npm ping` | Tag 1 |
-| Freie Ports | 3000 (Mock-API), 4200 (App), 4201 (`eventhub-lab`, Lab 12.2); Tag 4 zusätzlich 4210–4240, 4300/4301, 8080–8082 (Übersicht in [`project/README.md`](project/README.md#workspaces)) | – | Tag 1 |
+| Freie Ports | 3000 (Mock-API), 4200 (App), 4201 (Tag 3: `eventhub-lab`, Tag 4: `federation-admin`); Tag 4 zusätzlich 4210–4240, 4300/4301, 8080–8082 (Übersicht in [`project/README.md`](project/README.md#workspaces)) | – | Tag 1 |
 
 ## Node.js installieren
 
@@ -170,7 +170,7 @@ Die Workspaces für Tag 4 (`workspaces/…`) brauchen ebenfalls je ein `npm inst
 
 ## Docker (optional)
 
-Lab 9.3 (Keycloak) und Lab 13.3 (Container) nutzen Docker. Prüfung:
+Lab 9.3 (Keycloak) und Lab 13.3 (Container) nutzen Docker; Lab 9.3 kommt alternativ mit einer bereitgestellten Keycloak-Instanz ohne Docker aus. Prüfung:
 
 ```bash
 docker version
@@ -185,8 +185,9 @@ Docker Desktop ist für Unternehmen ab einer bestimmten Größe lizenzpflichtig 
 | --- | --- |
 | `npm install` hängt oder meldet `ETIMEDOUT` | Proxy setzen: `npm config set proxy http://<proxy>:<port>` und `npm config set https-proxy http://<proxy>:<port>` |
 | `UNABLE_TO_GET_ISSUER_CERT_LOCALLY` | Firmenzertifikat einbinden: `npm config set cafile <pfad-zum-zertifikat.pem>` |
-| Port 4200 belegt | `npm start -- --port 4300` |
-| Port 3000 belegt | `PORT=3100 npm run api`; dann im Code die API-URL anpassen (Lab 2.2 zeigt die Konfigurationsdatei) |
+| Port 4201 belegt (Workspace `eventhub-lab`) | im Workspace `npx ng serve --port 4202`; 4202 steht auch in den Redirect-URIs von Keycloak (Lab 9.3) |
+| Port 4200 belegt | `npm start -- --port 4290` (4210–4240 und 4300/4301 sind für die Workspaces an Tag 4 reserviert) |
+| Port 3000 belegt | Den belegenden Prozess beenden (macOS/Linux: `lsof -i :3000`). Die Beispiele erwarten die API fest auf Port 3000 (`API_URL` in `src/app/shared/api.ts`); `PORT=3100 npm run api` nur als Notlösung, dann `API_URL` anpassen |
 
 ## Fallbacks
 

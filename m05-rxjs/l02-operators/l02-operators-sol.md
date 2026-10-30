@@ -1,6 +1,6 @@
 # Lab 5.2 – Lösung: Live-Suche ohne Race Conditions
 
-Referenz: `src/app/examples/m05-rxjs/l02-operators/` (`session-search.ts`, `example.ts`), im Browser `/examples/m05-rxjs/l02-operators` (mit `switchMap`) und `/examples/m05-rxjs/l02-operators/ohne` (mit `mergeMap`, ohne `debounceTime`).
+Referenz: `src/app/examples/m05-rxjs/l02-operators/` (`session-search.ts`, `example.ts`), im Browser `/examples/m05-rxjs/l02-operators` (mit `switchMap`) und `/examples/m05-rxjs/l02-operators/ohne` (mit `mergeMap` und Entprellung 0 ms, also praktisch ohne `debounceTime`).
 
 ## Aufgabe 1: Starter kopieren
 

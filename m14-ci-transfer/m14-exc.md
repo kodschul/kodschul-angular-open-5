@@ -1,12 +1,12 @@
 # Transferprojekt „EventHub Release“ – Übung
 
 **Dauer:** ca. 240 Minuten (Teams à 2–3 Personen; 5-Tage-Variante, Tag 5)
-**Ändert die EventHub-Projektbasis?** Ja — neues Feature „Warteliste“ im Kurs-Projekt `output/project/` mit Tests, Pipeline und optional Container.
+**Ändert die EventHub-Projektbasis?** Ja — neues Feature „Warteliste“ im Kurs-Projekt `project/` mit Tests, Pipeline und optional Container.
 
 ## Vorbereitung
 
-- Terminal 1 im Ordner `output/project/`: `npm run api`.
-- Terminal 2 im Ordner `output/project/`: `npm start`.
+- Terminal 1 im Ordner `project/`: `npm run api`.
+- Terminal 2 im Ordner `project/`: `npm start`.
 - Eigenes Git-Repo (Fork oder Kopie des Kurs-Repos) mit der Pipeline aus Lab 14.1 unter `.github/workflows/ci.yml`.
 - Arbeitsordner für das Feature: `src/app/features/waitlist/` (neu anlegen). Routen-Eintrag in `src/app/app.routes.ts`.
 - Die Mock-API kennt keine eigene Wartelisten-Route. Ein Wartelisten-Eintrag ist eine Anmeldung mit `tickets: 0` und dem zusätzlichen Feld `waitlistSessionId`: `POST http://localhost:3000/registrations`. Die API speichert zusätzliche Felder unverändert.

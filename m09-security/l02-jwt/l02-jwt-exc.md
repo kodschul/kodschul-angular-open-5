@@ -5,8 +5,8 @@
 
 ## Vorbereitung
 
-- Terminal 1 im Ordner `output/project/`: `npm run api`.
-- Terminal 2 im Ordner `output/project/workspaces/eventhub-lab/`: `npx ng serve` (Port 4201).
+- Terminal 1 im Ordner `project/`: `npm run api`.
+- Terminal 2 im Ordner `project/workspaces/eventhub-lab/`: `npx ng serve` (Port 4201).
 - Arbeitsordner: `workspaces/eventhub-lab/src/app/` (`app.config.ts`, `eventhub/eventhub.routes.ts`, neue Dateien in `eventhub/auth/`)
 - Ausgangsstand: Ergebnis von Lab 8.2. Der Starter bringt den Ordner `eventhub/` vollständig mit; aus Lab 8.2 bleibt nur `app.config.ts` mit `withPreloading(DelayedPreloading)`. Ohne dieses Ergebnis `src/app/examples/m08-advanced-routing/l02-preloading/app.config.ts` nach `workspaces/eventhub-lab/src/app/` kopieren.
 - Starter: Ordner `src/app/starters/m09-l02-jwt/eventhub/` mit Stand Lab 8.2 plus fertigem `AuthService`, `jwt.ts`, `LOGIN_URL`, Login-Seite (ohne Login-Logik), Konto-, Admin- und „Kein Zugriff“-Seite, Shell mit Login-Status, Routen `login`, `account` und zweiter `admin`-Route sowie Gerüst `auth/auth.guards.ts`.
@@ -46,4 +46,5 @@
 ## Fallback
 
 - Ergebnis übernehmen: `src/app/examples/m09-security/l02-jwt/eventhub/` und `…/l02-jwt/app.config.ts` nach `workspaces/eventhub-lab/src/app/` kopieren (`login-form.ts` im Workspace nicht ersetzen).
+- Port 4201 belegt: `npx ng serve --port 4202` und http://localhost:4202 verwenden.
 - Vergleich im Browser ohne Workspace: http://localhost:4200/examples/m09-security/l02-jwt (gleiche Dateien; Interceptor und `LOGIN_URL` dort als Routen-Provider).

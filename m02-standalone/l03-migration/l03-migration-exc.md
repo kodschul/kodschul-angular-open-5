@@ -1,7 +1,7 @@
 # Lab 2.3 – Übung: Bestandsprojekt migrieren
 
 **Dauer:** ca. 23 Minuten (Einzel oder Paar, Checkpoint nach Schritt 1)
-**Ändert die EventHub-Projektbasis?** Nein — die Migration läuft im eigenen Workspace `output/project/workspaces/legacy-ngmodule/`.
+**Ändert die EventHub-Projektbasis?** Nein — die Migration läuft im eigenen Workspace `project/workspaces/legacy-ngmodule/`.
 
 ## Vorbereitung
 

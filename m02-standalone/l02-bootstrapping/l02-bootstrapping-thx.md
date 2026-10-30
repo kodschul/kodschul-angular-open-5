@@ -113,44 +113,39 @@ sequenceDiagram
 
 Schlägt ein Initializer fehl, wird die Root-Komponente nie erzeugt und das Promise von `bootstrapApplication` wird abgelehnt.
 
-## Eigener Provider: `provideEventHubConfig()`
+## Eigener Provider mit App-Initializer
 
-`public/config.json` liegt im Build unverändert unter `/config.json` und kann je Umgebung ausgetauscht werden:
+Muster: ein Service lädt eine Datei, eine eigene `provideXyz()`-Funktion registriert ihn und lässt den Start warten. Beispiel: UI-Texte aus `public/i18n/de.json`, die vor der ersten Komponente feststehen müssen.
+
+Dateien unter `public/` liegen im Build unverändert unter ihrem Pfad (`/i18n/de.json`) und lassen sich je Umgebung austauschen:
 
 ```json
-{
-  "apiUrl": "http://localhost:3000",
-  "featureFlags": { "comments": true }
-}
+{ "greeting": "Willkommen bei EventHub", "logout": "Abmelden" }
 ```
 
 ```ts
-// eventhub-config.ts
-export interface EventHubConfig {
-  apiUrl: string;
-  featureFlags: { comments: boolean };
-}
+// ui-texts.ts
+export type UiTexts = Record<string, string>;
 
 @Injectable()
-export class EventHubConfigService {
+export class UiTextService {
   private readonly http = inject(HttpClient);
-  private loaded?: EventHubConfig;
+  private texts: UiTexts = {};
 
-  load(url: string): Observable<EventHubConfig> {
+  load(lang: string): Observable<UiTexts> {
     // tap: Nebenwirkung (merken), der Wert läuft unverändert weiter
-    return this.http.get<EventHubConfig>(url).pipe(tap((config) => (this.loaded = config)));
+    return this.http.get<UiTexts>(`/i18n/${lang}.json`).pipe(tap((texts) => (this.texts = texts)));
   }
 
-  get config(): EventHubConfig {
-    if (!this.loaded) throw new Error('EventHub-Konfiguration ist noch nicht geladen');
-    return this.loaded;
+  text(key: string): string {
+    return this.texts[key] ?? key;              // fehlender Schlüssel: Schlüssel selbst anzeigen
   }
 }
 
-export function provideEventHubConfig(url = '/config.json'): EnvironmentProviders {
+export function provideUiTexts(lang = 'de'): EnvironmentProviders {
   return makeEnvironmentProviders([
-    EventHubConfigService,                                                 // Service registrieren
-    provideAppInitializer(() => inject(EventHubConfigService).load(url)),   // Start wartet auf load()
+    UiTextService,                                                     // Service registrieren
+    provideAppInitializer(() => inject(UiTextService).load(lang)),     // Start wartet auf load()
   ]);
 }
 ```
@@ -160,13 +155,16 @@ Einsatz in einer `ApplicationConfig`:
 ```ts
 providers: [
   provideHttpClient(withFetch()),   // HttpClient für load(), explizit mit fetch
-  provideEventHubConfig(),
+  provideUiTexts('de'),
 ]
 ```
 
+- `makeEnvironmentProviders([...])` bündelt beliebig viele Provider; die Funktion liefert sie als ein Paket wie `provideRouter()`.
 - Die Initializer-Funktion läuft im Injektionskontext, deshalb darf sie `inject()` nutzen.
-- Rückgabe Observable oder Promise: Angular wartet. Rückgabe `void`: kein Warten.
+- Rückgabe Observable oder Promise: Angular wartet. Rückgabe `void` (z. B. ein Block `{ … }` ohne `return`): kein Warten.
 - Weil der Wert vor der ersten Komponente feststeht, darf eine Komponente ihn in ein normales Feld lesen. Daten, die später kommen (HTTP), laufen weiter über die `async`-Pipe (Lab 1.1).
+
+Die Übung wendet dasselbe Muster auf `public/config.json` (API-URL, Feature-Flags) an.
 
 ## Die Mini-App im Playground
 
@@ -190,8 +188,8 @@ Die Mini-App hat einen eigenen Injector: Provider aus der `app.config.ts` der Ku
 
 | Symptom | Ursache | Lösung |
 | --- | --- | --- |
-| `NG0201: No provider found for …EventHubConfigService` | Service nicht in `makeEnvironmentProviders([...])` | Service eintragen |
-| `EventHub-Konfiguration ist noch nicht geladen` | kein Initializer oder Initializer gibt nichts zurück (`() => { service.load(url); }`) | Observable zurückgeben: `() => inject(…).load(url)` |
+| `NG0201: No provider found for …` (eigener Service) | Service nicht in `makeEnvironmentProviders([...])` | Service eintragen |
+| Service meldet „noch nicht geladen“ oder liefert leere Werte | kein Initializer oder Initializer gibt nichts zurück (`() => { service.load(…); }`) | Observable zurückgeben: Pfeilfunktion ohne `{ }` |
 | Initializer lädt nichts, Network-Tab leer | `load()` liefert ein Observable, das niemand abonniert | Observable zurückgeben; Angular abonniert es |
 | `Http failure response for …/config-fehlt.json: 404 Not Found` | Datei fehlt | Datei in `public/` anlegen oder URL korrigieren |
 | `provideHttpClient` in `@Component.providers` meldet einen Typfehler | `EnvironmentProviders` sind dort nicht erlaubt | in `ApplicationConfig` oder Routen-`providers` |

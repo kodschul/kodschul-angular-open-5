@@ -5,7 +5,7 @@
 
 ## Vorbereitung
 
-- Terminal 1 im Ordner `output/project/`: `npm start` (die Mock-API wird in diesem Lab nicht gebraucht).
+- Terminal 1 im Ordner `project/`: `npm start` (die Mock-API wird in diesem Lab nicht gebraucht).
 - Arbeitsdatei: `src/app/playground/playground.ts`
 - Starter: `src/app/starters/m05-l01-marbles.ts`
 - Browser: http://localhost:4200/playground mit geöffneter DevTools-Konsole

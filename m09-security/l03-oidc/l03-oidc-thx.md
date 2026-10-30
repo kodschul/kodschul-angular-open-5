@@ -84,7 +84,14 @@ PKCE ersetzt bei Public Clients das Secret: Wer nur den Code abfängt, kann ihn 
 
 ## Keycloak für den Kurs
 
-Der Realm kommt fertig als Datei mit und wird beim Start importiert. Klicks in der Admin-Konsole sind nicht nötig.
+Der Realm kommt fertig als Datei mit (`workspaces/keycloak/realm/eventhub-realm.json`). Keycloak läuft in einer von zwei Varianten; für die App ändert sich nur die Basis-Adresse:
+
+| Variante | Basis-Adresse von Keycloak | Voraussetzung |
+| --- | --- | --- |
+| lokal im Container | `http://localhost:8080` | Docker; `docker compose up` im Ordner `workspaces/keycloak/` importiert den Realm beim Start |
+| bereitgestellte Instanz | Adresse der Instanz, z. B. `https://keycloak.example.org` | Realm-Datei dort importiert; kein Docker nötig |
+
+Die Issuer-URL eines Realms ist immer `<Basis-Adresse>/realms/<Realm-Name>`. Die EventHub-App läuft in beiden Varianten lokal im eigenen Browser (Workspace auf Port 4201); Keycloak leitet nach dem Login an `http://localhost:…` zurück, deshalb funktionieren die Redirect-URIs auch mit einer entfernten Instanz.
 
 ```yaml
 # workspaces/keycloak/docker-compose.yml
@@ -101,36 +108,44 @@ services:
       - ./realm:/opt/keycloak/data/import:ro
 ```
 
-| Eintrag in `realm/eventhub-realm.json` | Wert | Bedeutung |
-| --- | --- | --- |
-| `realm` | `eventhub` | Issuer-URL `http://localhost:8080/realms/eventhub` |
-| `clients[0].clientId` | `eventhub-spa` | Client-ID in der Angular-Konfiguration |
-| `publicClient` | `true` | kein Secret |
-| `attributes."pkce.code.challenge.method"` | `S256` | Keycloak verlangt PKCE mit SHA-256 |
-| `redirectUris` | `http://localhost:4200/*`, `http://localhost:4201/*`, `http://localhost:4202/*` (Ausweich-Port aus Lab 8.1) | erlaubte Rücksprung-Adressen |
-| `webOrigins` | dieselben Origins | CORS für Token-Anfragen aus dem Browser |
-| `protocolMappers` | Realm-Rollen als Claim `roles` | Rollen in ID-Token, Access-Token und Userinfo |
-| `users` | `alice` / `alice123` (admin, user), `bob` / `bob123` (user) | Kurs-Konten |
+| Eintrag in `realm/eventhub-realm.json` | Bedeutung |
+| --- | --- |
+| `realm` | Name des Realms; Teil der Issuer-URL |
+| `clients[0].clientId` | Client-ID, die die Angular-Konfiguration nennt |
+| `publicClient` | `true` = Client ohne Secret |
+| `attributes."pkce.code.challenge.method"` | verlangte PKCE-Methode (`S256` = SHA-256) |
+| `redirectUris` | erlaubte Rücksprung-Adressen; ein anderer Port der App führt zu „Invalid parameter: redirect_uri“ |
+| `webOrigins` | Origins, die Token-Anfragen aus dem Browser schicken dürfen (CORS) |
+| `protocolMappers` | zusätzliche Claims, hier die Realm-Rollen als Claim `roles` |
+| `users` | Test-Konten mit Passwort (`credentials`) und Rollen (`realmRoles`) |
+| `sslRequired` | `external`: HTTP nur für `localhost` und private Netze, sonst HTTPS |
 
 ```bash
+# Variante lokal
 cd workspaces/keycloak
 docker compose up            # erster Start lädt das Image, danach ca. 20–40 s
-curl http://localhost:8080/realms/eventhub/.well-known/openid-configuration
 docker compose down          # stoppen und Daten verwerfen
+
+# beide Varianten: bereit, sobald die Issuer-URL plus /.well-known/openid-configuration JSON liefert
+curl <Basis-Adresse>/realms/<Realm-Name>/.well-known/openid-configuration
 ```
 
 ## Einbindung mit angular-auth-oidc-client
 
+Beispiel aus einer anderen App: ein Intranet-Portal mit eigenem Realm `intranet` und Client `intranet-portal`, das zusätzlich die Telefonnummer anfragt. Die Übung trägt die Werte des EventHub-Realms ein.
+
 ```ts
-// oidc.config.ts
+// oidc.config.ts (Beispiel Intranet-Portal)
+import { LogLevel, OpenIdConfiguration } from 'angular-auth-oidc-client';
+
 export const oidcConfig: OpenIdConfiguration = {
-  authority: 'http://localhost:8080/realms/eventhub', // liest /.well-known/openid-configuration
-  clientId: 'eventhub-spa',
-  responseType: 'code',                               // Code Flow, PKCE automatisch
-  scope: 'openid profile email',
-  redirectUrl: `${window.location.origin}/oidc`,
-  postLogoutRedirectUri: `${window.location.origin}/oidc`,
-  silentRenew: false,
+  authority: 'https://login.example.org/realms/intranet', // Issuer-URL; liest /.well-known/openid-configuration
+  clientId: 'intranet-portal',                            // Client-ID aus dem Realm
+  responseType: 'code',                                   // Code Flow, PKCE automatisch
+  scope: 'openid phone',                                  // openid ist Pflicht, weitere Scopes je nach Bedarf
+  redirectUrl: `${window.location.origin}/login-callback`, // Rücksprung-Seite der App
+  postLogoutRedirectUri: `${window.location.origin}/`,
+  silentRenew: false,                                     // Token-Erneuerung aus
   logLevel: LogLevel.Warn,
 };
 
@@ -165,11 +180,13 @@ provideAuth({ config: oidcConfig }),
 
 | Symptom | Ursache | Lösung |
 | --- | --- | --- |
-| Keycloak zeigt „Invalid parameter: redirect_uri“ | Port oder Pfad nicht in `redirectUris` | Workspace auf 4201 bzw. Kurs-App auf 4200 starten; Realm-Datei prüfen |
-| Konsole: Fehler beim Laden von `.well-known/openid-configuration` | Keycloak läuft nicht oder `authority` falsch | `docker compose up`, URL im Browser öffnen |
+| Keycloak zeigt „Invalid parameter: redirect_uri“ | Port oder Pfad nicht in `redirectUris` | Workspace auf 4201 (oder 4202) starten; Realm-Datei prüfen |
+| `npx ng serve` im Workspace meldet „Port 4201 is already in use“ | anderer Dev-Server belegt 4201 | anderen Prozess beenden oder `npx ng serve --port 4202` (4202 steht in `redirectUris`); die Rückfrage nach einem anderen Port mit „n“ beantworten, ein Zufallsport ist nicht erlaubt |
+| Konsole: Fehler beim Laden von `.well-known/openid-configuration` | Keycloak läuft nicht, ist nicht erreichbar oder `authority` falsch | Issuer-URL plus `/.well-known/openid-configuration` im Browser öffnen; lokal `docker compose up` prüfen |
+| Keycloak zeigt „HTTPS required“ | bereitgestellte Instanz über eine öffentliche Adresse per `http://` aufgerufen (`sslRequired: external`) | HTTPS-Adresse der Instanz in `authority` eintragen |
 | Login klappt, Seite zeigt weiter „nicht angemeldet“ | `checkAuth()` wird auf der Rücksprung-Seite nicht aufgerufen | `checkAuth()` im Konstruktor der Seite unter `redirectUrl` |
 | `NG0201: No provider found for …StsConfigLoader` | `provideAuth` fehlt in `app.config.ts` oder steht an einer Route | in die Root-`providers` |
-| Rolle fehlt in den Claims | Mapper für `roles` fehlt im Realm | Realm-Datei aus dem Kurs verwenden, Container neu erstellen (`down`, `up`) |
+| Rolle fehlt in den Claims | Mapper für `roles` fehlt im Realm | Realm-Datei aus dem Kurs verwenden; lokal Container neu erstellen (`down`, `up`), bei einer bereitgestellten Instanz den Realm neu importieren |
 
 ## Fazit
 

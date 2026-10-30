@@ -115,19 +115,19 @@ Im Kurs-Projekt ist `@vitest/coverage-v8` installiert. In Projekten ohne das Pak
 | Spies werden nach jedem `it` automatisch entfernt | `vi.restoreAllMocks()` in `afterEach` | Vitest räumt ohne Konfiguration nicht auf |
 | `jasmine.objectContaining({...})` | `expect.objectContaining({...})` | – |
 
-Vorher (Jasmine) und nachher (Vitest) am selben Test:
+Vorher (Jasmine) und nachher (Vitest) am selben Test. Beispiel: eine Funktion `reportInvalidEmails(emails)`, die für jede ungültige Adresse `console.error` aufruft und die Anzahl liefert:
 
 ```ts
 // Jasmine
-const warn = spyOn(console, 'warn');
-expect(logSoldOut(sessions)).toBe(1);
-expect(warn).toHaveBeenCalledWith('Ausgebucht: Testen ohne Tränen');
+const error = spyOn(console, 'error');
+expect(reportInvalidEmails(['ada@eventhub.test', 'kaputt'])).toBe(1);
+expect(error).toHaveBeenCalledWith('Ungültige E-Mail: kaputt');
 
 // Vitest
 afterEach(() => vi.restoreAllMocks());           // Spy wieder entfernen
-const warn = vi.spyOn(console, 'warn').mockImplementation(() => undefined); // Ausgabe unterdrücken
-expect(logSoldOut(sessions)).toBe(1);
-expect(warn).toHaveBeenCalledWith('Ausgebucht: Testen ohne Tränen');
+const error = vi.spyOn(console, 'error').mockImplementation(() => undefined); // Ausgabe unterdrücken
+expect(reportInvalidEmails(['ada@eventhub.test', 'kaputt'])).toBe(1);
+expect(error).toHaveBeenCalledWith('Ungültige E-Mail: kaputt');
 ```
 
 Der dritte Jasmine-Test der Übung holt einen Service über `TestBed`, den Test-Injector von Angular (Details in Lab 10.2), und wandelt das Observable mit `firstValueFrom` aus RxJS in ein Promise um: `await firstValueFrom(obs$)` wartet auf den ersten Wert. Beides bleibt beim Umstieg auf Vitest unverändert.

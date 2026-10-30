@@ -1,6 +1,6 @@
 # CI-und-Transfer-Cheatsheet
 
-Schnellreferenz für Modul 14 (Pipeline, Modernisierung). Vorlagen: `output/project/workspaces/ci/`, `anhang-modernisierungsplan-vorlage.md`.
+Schnellreferenz für Modul 14 (Pipeline, Modernisierung). Vorlagen: `project/workspaces/ci/`, `anhang-modernisierungsplan-vorlage.md`.
 
 ## GitHub-Actions-Workflow
 

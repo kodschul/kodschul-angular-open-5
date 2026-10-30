@@ -71,6 +71,7 @@ export class Playground {
   readonly cart = inject(CartStore);
 
   // Aufgabe 3: private readonly dispatch = injectDispatch(sessionAdminEvents);
+  //            Imports: injectDispatch aus '@ngrx/signals/events', sessionAdminEvents aus './m07-l05-events/session.events'
 
   cancel(session: Session): void {
     // Aufgabe 3: Ereignis cancelled mit sessionId und title auslösen

@@ -5,8 +5,8 @@
 
 ## Vorbereitung
 
-- Terminal 1 im Ordner `output/project/`: `npm run api`
-- Terminal 2 im Ordner `output/project/`: `npm start`
+- Terminal 1 im Ordner `project/`: `npm run api`
+- Terminal 2 im Ordner `project/`: `npm start`
 - Arbeitsdatei: `src/app/playground/playground.ts`
 - Starter: `src/app/starters/m05-l02-operators.ts`
 - Browser: http://localhost:4200/playground, DevTools mit Tab „Console“ und Tab „Network“ (Filter `sessions`)
@@ -43,4 +43,4 @@ Der Starter enthält die fertige Komponente (Suchfeld, Level-Auswahl, Checkbox f
 
 ## Fallback
 
-Läuft die Mock-API nicht, zeigt die Seite in Aufgabe 6 dauerhaft „Suche fehlgeschlagen“ und der Network-Tab `net::ERR_CONNECTION_REFUSED`. Zum Vergleich ohne eigenen Code dienen `/examples/m05-rxjs/l02-operators/ohne` (mit `mergeMap` und ohne `debounceTime`, wie nach Aufgabe 2) und `/examples/m05-rxjs/l02-operators` (mit `switchMap`); beide brauchen ebenfalls die Mock-API.
+Läuft die Mock-API nicht, zeigt die Seite in Aufgabe 6 dauerhaft „Suche fehlgeschlagen“ und der Network-Tab `net::ERR_CONNECTION_REFUSED`. Zum Vergleich ohne eigenen Code dienen `/examples/m05-rxjs/l02-operators/ohne` (mit `mergeMap` und Entprellung 0 ms, also eine Anfrage pro Tastendruck wie nach Aufgabe 2) und `/examples/m05-rxjs/l02-operators` (mit `switchMap`); beide brauchen ebenfalls die Mock-API.

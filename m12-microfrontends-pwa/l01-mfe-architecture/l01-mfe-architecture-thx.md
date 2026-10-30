@@ -94,6 +94,19 @@ Gemischte Lösungen sind üblich: ein Monorepo pro Team, Federation zwischen den
 - Geteilter Zustand bleibt die schwierigste Stelle; ab Lab 12.2 gilt die Regel: so wenig wie möglich teilen, und wenn, dann über ein klar versioniertes Paket.
 - Federation verlangt Einigkeit über geteilte Versionen; ein Team kann Angular nicht allein aktualisieren.
 
+## Typische Fehler
+
+Typische Fehlentscheidungen, wie sie in Architektur-Reviews auffallen:
+
+| Symptom | Ursache | Lösung |
+| --- | --- | --- |
+| Remotes werden immer gemeinsam ausgeliefert | Micro-Frontends ohne getrennte Teams oder Release-Takte | zurück zum Monorepo mit Feature-Libraries (Lab 11.1) |
+| Startseite lädt Angular mehrfach, mobil spürbar langsam | Web Components oder iframes für Teile derselben Angular-App | Federation oder Monorepo, damit Angular einmal geladen wird |
+| Remotes sehen unterschiedlich aus, Buttons verhalten sich anders | kein gemeinsames Design-System | UI-Kit als Library (Lab 11.2) vor dem ersten Remote |
+| Ein Update des Hosts bricht alle Remotes | keine Absprache über geteilte Versionen | Plattform-Gruppe gibt Versionen vor, gemeinsamer Upgrade-Takt |
+| Remote zeigt „nicht angemeldet“, obwohl der Host angemeldet ist | jeder Teil führt eigenen Login-Zustand | Login nur im Host, Remotes lesen ihn mit (Lab 12.2) |
+| Entscheidung lässt sich im Team nicht begründen | Ansatz nach Mode statt nach Kriterien gewählt | Entscheidungstabelle oben Zeile für Zeile ausfüllen |
+
 ## Fazit
 
 - Micro-Frontends lohnen sich, wenn mehrere Teams getrennt ausliefern müssen; vorher reicht ein Monorepo.

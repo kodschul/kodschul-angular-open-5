@@ -1,6 +1,6 @@
 # Lab 11.1 – Lösung: Nx Workspace
 
-Alle Befehle laufen im Ordner `output/project/workspaces/nx-eventhub/`. Die Kurs-App enthält für dieses Lab nur eine Infoseite: `/examples/m11-libraries/l01-nx` (Datei `src/app/examples/m11-libraries/l01-nx/example.ts`).
+Alle Befehle laufen im Ordner `project/workspaces/nx-eventhub/`. Die Kurs-App enthält für dieses Lab nur eine Infoseite: `/examples/m11-libraries/l01-nx` (Datei `src/app/examples/m11-libraries/l01-nx/example.ts`).
 
 ## Aufgabe 1: Projekte auflisten und App starten
 

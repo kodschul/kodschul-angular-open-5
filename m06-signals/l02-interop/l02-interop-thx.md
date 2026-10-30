@@ -12,7 +12,7 @@ Ein Zustand: Zu jedem Zeitpunkt gibt es genau einen aktuellen Wert, den jede Ste
 <details>
 <summary>Welche Probleme aus Lab 5.3 verschwinden, wenn niemand mehr <code>subscribe</code> schreibt?</summary>
 
-Vergessene Abos und damit Lecks: `toSignal` (stellt den letzten Wert eines Observables als Signal bereit), `httpResource` (lädt per HTTP direkt in Signals) und die `async`-Pipe beenden ihre Abos selbst, wenn die Komponente zerstört wird. Beide Funktionen stellt dieses Lab vor.
+Vergessene Abos und damit Lecks: `toSignal` (stellt den letzten Wert eines Observables als Signal bereit), `httpResource` (lädt per HTTP direkt in Signals) und die `async`-Pipe beenden ihre Abos selbst, wenn die Komponente zerstört wird. `toSignal` und `httpResource` stellt dieses Lab vor; die `async`-Pipe ist aus Lab 1.1 bekannt.
 
 </details>
 

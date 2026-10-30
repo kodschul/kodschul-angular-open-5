@@ -1,11 +1,11 @@
 # Lab 11.3 – Übung: Angular Elements
 
 **Dauer:** ca. 13 Minuten
-**Ändert die EventHub-Projektbasis?** Nein — die Übung arbeitet im eigenen Workspace `output/project/workspaces/eventhub-elements/`.
+**Ändert die EventHub-Projektbasis?** Nein — die Übung arbeitet im eigenen Workspace `project/workspaces/eventhub-elements/`.
 
 ## Vorbereitung
 
-- Terminal im Ordner `output/project/workspaces/eventhub-elements/`: `npm install`.
+- Terminal im Ordner `project/workspaces/eventhub-elements/`: `npm install`.
 - Dateien: `src/app/signup-widget.ts` (Komponente), `src/main.ts` (Registrierung), `public/demo.html` (statische Seite ohne Angular).
 - Browser: http://localhost:4230/demo.html (nach Aufgabe 2).
 

@@ -13,7 +13,7 @@ Kleine EventHub-App im Stil Angular 15 (NgModule, `*ngIf`/`*ngFor`, Konstruktor-
 ## Start
 
 ```bash
-# Terminal 1, im Ordner output/project: Mock-API
+# Terminal 1, im Ordner project: Mock-API
 npm run api
 
 # Terminal 2, in diesem Ordner

@@ -48,7 +48,8 @@ export class Playground {
     const start = performance.now();
     console.log('Start, Frame', frameSeit(start));
 
-    // TODO: an jede Kette ein tap({ next, complete }) hängen, das Name, Frame und Wert loggt
+    // TODO Aufgabe 4: an jede Kette hinter den Operator ein tap({ next, complete }) hängen, das Name, Frame und Wert loggt
+    //                 (tap oben im Import aus 'rxjs' ergänzen)
 
     zeitstrahl('-1-2-3|', { 1: 1, 2: 2, 3: 3 })
       .pipe(map((x) => x * 10))

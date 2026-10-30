@@ -1,6 +1,6 @@
 # Lab 11.2 – Lösung: Angular Library bauen und veröffentlichen
 
-Fertige Library: `output/project/workspaces/eventhub-ui-lib/` (Stand 0.1.0). Die zweite App `output/project/workspaces/eventhub-ui-consumer/` liegt im Ausgangszustand im Repo; die Änderungen stehen unten. Infoseite in der Kurs-App: `/examples/m11-libraries/l02-library`.
+Fertige Library: `project/workspaces/eventhub-ui-lib/` (Stand 0.1.0). Die zweite App `project/workspaces/eventhub-ui-consumer/` liegt im Ausgangszustand im Repo; die Änderungen stehen unten. Infoseite in der Kurs-App: `/examples/m11-libraries/l02-library`.
 
 ## Aufgabe 1: Vertrag, Peers, Ziel
 
@@ -178,4 +178,4 @@ Building entry point 'eventhub-ui/testing'
 
 `dist/eventhub-ui/` enthält danach zusätzlich `fesm2022/eventhub-ui-testing.mjs`, `types/eventhub-ui-testing.d.ts` und `testing/package.json`. Import in der App: `import { fakeSession } from 'eventhub-ui/testing';`.
 
-Der eigene Workspace außerhalb von `output/project/` enthält nach `ng generate library my-ui` dieselbe Struktur wie `eventhub-ui-lib` vor der Übung, mit einer Platzhalter-Komponente `MyUi` und einer `.spec.ts`.
+Der eigene Workspace außerhalb von `project/` enthält nach `ng generate library my-ui` dieselbe Struktur wie `eventhub-ui-lib` vor der Übung, mit einer Platzhalter-Komponente `MyUi` und einer `.spec.ts`.

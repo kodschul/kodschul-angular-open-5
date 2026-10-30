@@ -127,6 +127,7 @@ Endergebnis: die EventHub-Konferenzplattform in vielen Ausbaustufen, ein Moderni
 | 14:45–15:00 | Pause | |
 | 15:00–16:15 | [Modul 14: Continuous Integration und Transfer](../m14-ci-transfer/) | 14.1 CI-Pipeline für Angular (25), 14.2 Architektur-Review: Bestands-App modernisieren (50) |
 | 16:15–16:30 | Kursabschluss | Recap, offene Fragen, Ausblick, Feedback |
+
 ## Aufbau des Kurs-Repos
 
 | Pfad | Inhalt |

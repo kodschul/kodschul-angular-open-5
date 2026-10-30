@@ -5,8 +5,8 @@
 
 ## Vorbereitung
 
-- Terminal 1 im Ordner `output/project/`: `npm run api`.
-- Terminal 2 im Ordner `output/project/workspaces/eventhub-perf/` (aus Lab 13.1, `npm install` erledigt).
+- Terminal 1 im Ordner `project/`: `npm run api`.
+- Terminal 2 im Ordner `project/workspaces/eventhub-perf/` (aus Lab 13.1, `npm install` erledigt).
 - `messprotokoll.md` aus Lab 13.1 liegt im selben Ordner.
 - Arbeitsdateien: `src/app/home/home.ts`, `src/app/sessions/session-list.ts`, `package.json`, `angular.json`.
 - Zum Zurücksetzen der Variante: `git checkout -- .` im Ordner `workspaces/eventhub-perf/`.

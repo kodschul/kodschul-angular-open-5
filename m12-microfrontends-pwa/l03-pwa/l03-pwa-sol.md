@@ -1,6 +1,6 @@
 # Lab 12.3 – Lösung: Progressive Web App
 
-Ergebnis: `output/project/workspaces/eventhub-pwa-final/` (Ausgangszustand `eventhub-pwa/` plus `ng add @angular/pwa` und die Änderungen unten). Infoseite in der Kurs-App: `/examples/m12-microfrontends-pwa/l03-pwa`.
+Ergebnis: `project/workspaces/eventhub-pwa-final/` (Ausgangszustand `eventhub-pwa/` plus `ng add @angular/pwa` und die Änderungen unten). Infoseite in der Kurs-App: `/examples/m12-microfrontends-pwa/l03-pwa`.
 
 ## Aufgabe 1: Ohne PWA
 

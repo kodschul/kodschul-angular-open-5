@@ -22,7 +22,7 @@ Die Starter-App zeigt Sessions als Karten, öffnet über „Details“ eine Deta
 | 5 | Link ohne Routen-Parameter |
 | 6 | Event nicht weitergegeben |
 
-Dateien mit der Endung `.broken.ts` sind vom Build ausgeschlossen, weil sie absichtlich nicht kompilieren.
+Dateien mit der Endung `.broken.ts` unter `src/app/starters/` sind vom Build ausgeschlossen, weil sie absichtlich nicht kompilieren. Im Playground gilt das nicht: Nach dem Kopieren werden sie umbenannt (Aufgabe 1) und gehören dann zum Build.
 
 ## Aufgaben
 

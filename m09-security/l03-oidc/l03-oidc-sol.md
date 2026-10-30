@@ -2,6 +2,8 @@
 
 Fertiges Ergebnis: `src/app/examples/m09-security/l03-oidc/` (Ordner `eventhub/`, `app.config.ts`, `oidc.config.ts`) für den Workspace `eventhub-lab`; Keycloak-Konfiguration in `workspaces/keycloak/`. Die Route `/examples/m09-security/l03-oidc` der Kurs-App ist eine Infoseite, weil `provideAuth` die Root-Konfiguration braucht.
 
+Adressen und Werte unten gelten für die lokale Variante (`http://localhost:8080`). Bei einer bereitgestellten Keycloak-Instanz steht in `authority`, `iss` und den Endpunkt-URLs deren Adresse; alles andere ist gleich.
+
 ## Aufgabe 1: Starter übernehmen
 
 ```bash
@@ -37,7 +39,7 @@ export const oidcConfig: OpenIdConfiguration = {
 };
 ```
 
-`authority` ist die Issuer-URL: `http://localhost:8080/realms/<realm>`. Die Bibliothek hängt `/.well-known/openid-configuration` an und liest daraus alle Endpunkte.
+`authority` ist die Issuer-URL: `<Basis-Adresse>/realms/<realm>`, lokal also `http://localhost:8080/realms/eventhub`. Bei einer bereitgestellten Keycloak-Instanz steht deren Adresse statt `http://localhost:8080`; alle anderen Werte bleiben gleich. Die Bibliothek hängt `/.well-known/openid-configuration` an und liest daraus alle Endpunkte.
 
 ## Aufgabe 4: provideAuth, Route, Link
 
@@ -105,7 +107,7 @@ import { filter } from 'rxjs';
       </section>
       <button class="btn" type="button" (click)="logout()">Logout bei Keycloak</button>
     } @else {
-      <p class="muted">Nicht angemeldet. Login leitet zu Keycloak weiter (Port 8080) und kommt hierher zurück.</p>
+      <p class="muted">Nicht angemeldet. Login leitet zu Keycloak weiter und kommt hierher zurück.</p>
       <button class="btn btn-primary" type="button" (click)="login()">Login mit Keycloak</button>
     }
   `,
@@ -120,7 +122,7 @@ export class OidcPage {
     inject(PublicEventsService)
       .registerForEvents()
       .pipe(filter((event) => event.type === EventTypes.ConfigLoadingFailed), takeUntilDestroyed())
-      .subscribe(() => this.error.set('Keycloak nicht erreichbar (http://localhost:8080). Läuft docker compose up?'));
+      .subscribe(() => this.error.set('Keycloak nicht erreichbar: authority in oidc.config.ts prüfen (lokal: läuft docker compose up?).'));
 
     this.oidc.checkAuth().subscribe({
       next: ({ isAuthenticated }) => {
@@ -128,7 +130,7 @@ export class OidcPage {
           this.oidc.getPayloadFromIdToken().subscribe((claims) => this.idTokenClaims.set(claims));
         }
       },
-      error: () => this.error.set('Keycloak nicht erreichbar (http://localhost:8080). Läuft docker compose up?'),
+      error: () => this.error.set('Keycloak nicht erreichbar: authority in oidc.config.ts prüfen (lokal: läuft docker compose up?).'),
     });
   }
 

@@ -46,6 +46,8 @@ Gemeinsame Bausteine ließen sich mit einem Import bündeln, Provider und Routen
 | Bündeln | `exports` eines SharedModule | exportiertes Array, z. B. `export const SESSION_UI = [LevelBadge, DurationPipe] as const;` |
 | Start | `bootstrapModule(AppModule)` | `bootstrapApplication(App, appConfig)` (Lab 2.2) |
 
+Bild dazu (aus Lab 1.1): Das `SharedModule` ist ein Gemeinschaftsschrank, aus dem jede importierende Komponente alles bekommt. Standalone packt jede Komponente ihren eigenen Koffer: Ihr `imports`-Array enthält genau das, was ihr Template verwendet.
+
 ## Vorher: Baustein im SharedModule
 
 ```ts

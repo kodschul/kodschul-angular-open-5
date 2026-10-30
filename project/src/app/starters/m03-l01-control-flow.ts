@@ -60,7 +60,7 @@ export class SessionSortPipe implements PipeTransform {
 export class Playground {
   private readonly api = inject(SessionApi);
 
-  // Observable + async pipe: die Ansicht aktualisiert sich ohne Zone.js (Lab 2.2)
+  // Observable + async pipe: die Ansicht aktualisiert sich ohne Zone.js (Lab 1.1)
   readonly sessions$ = this.api.getSessions();
 
   // Einfache Felder, die nur durch Template-Events geändert werden

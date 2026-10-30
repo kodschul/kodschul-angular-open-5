@@ -1,6 +1,6 @@
 # Lab 14.1 – Lösung: CI-Pipeline für Angular
 
-Fertiger Workflow: `output/project/workspaces/ci/.github/workflows/ci.yml`. Info-Seite in der Kurs-App: `/examples/m14-ci-transfer/l01-ci`.
+Fertiger Workflow: `project/workspaces/ci/.github/workflows/ci.yml`. Info-Seite in der Kurs-App: `/examples/m14-ci-transfer/l01-ci`.
 
 ## Aufgabe 1: Starter an den richtigen Ort
 

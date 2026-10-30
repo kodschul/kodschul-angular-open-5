@@ -5,9 +5,9 @@
 
 ## Vorbereitung
 
-- Terminal 1 im Ordner `output/project/`: `npm run api`.
-- Terminal 2 im Ordner `output/project/`: `npm start`.
-- Terminal 3 im Ordner `output/project/` für Skripte.
+- Terminal 1 im Ordner `project/`: `npm run api`.
+- Terminal 2 im Ordner `project/`: `npm start`.
+- Terminal 3 im Ordner `project/` für Skripte.
 - Arbeitsdatei: `src/app/playground/playground.ts`
 - Starter: `src/app/starters/m09-l01-tokens.ts`
 - Skript: `src/app/examples/m09-security/l01-tokens/decode-jwt.mjs`

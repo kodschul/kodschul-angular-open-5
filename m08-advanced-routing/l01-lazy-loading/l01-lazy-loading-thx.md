@@ -95,7 +95,7 @@ styles-YGSHSUSE.css | styles        |   1.75 kB |               644 bytes
 
 | Spalte | Bedeutung |
 | --- | --- |
-| `Names` | Name des Chunks; bei Lazy Chunks abgeleitet vom Dateinamen (`admin-page`), `-` bei geteiltem Code |
+| `Names` | Name des Chunks; bei Lazy Chunks abgeleitet vom Dateinamen (`stats-page`), `-` bei geteiltem Code |
 | `Raw size` | Größe der Datei ohne Kompression |
 | `Estimated transfer size` | geschätzte Größe nach Kompression, also das, was übers Netz geht |
 | `Initial total` | Summe aller Initial Chunks: der Preis jedes Seitenaufrufs |
@@ -104,88 +104,96 @@ styles-YGSHSUSE.css | styles        |   1.75 kB |               644 bytes
 
 ## Dann mit: loadComponent und loadChildren
 
-```ts
-// Ergebnis: src/app/examples/m08-advanced-routing/l01-lazy-loading/eventhub/eventhub.routes.ts
-import { SessionsPage } from './sessions/sessions-page';   // Startseite bleibt statisch
-import { SessionsStore } from './sessions/sessions-store';
-import { Shell } from './shell';
-// kein import von AdminPage, SpeakerList, SpeakerDetail mehr!
+Beispiel aus einer anderen Ausbaustufe von EventHub: eine Statistik-Seite und ein Räume-Feature (Liste und Detail) werden nachgeladen. Die Übung wendet dasselbe Muster auf Admin und Speaker an.
 
-export const EVENTHUB_ROUTES: Routes = [
+```ts
+// app.routes.ts (Beispiel)
+import { HomePage } from './home/home-page';            // Startseite bleibt statisch
+// kein import von StatsPage, RoomList, RoomDetail!
+
+export const routes: Routes = [
+  { path: '', component: HomePage },
   {
-    path: '',
-    component: Shell,
-    children: [
-      { path: '', pathMatch: 'full', redirectTo: 'sessions' },
-      { path: 'sessions', component: SessionsPage, providers: [SessionsStore] },
-      {
-        path: 'speakers',
-        loadChildren: () => import('./speakers/speakers.routes'),   // Routen-Datei mit default export
-      },
-      {
-        path: 'admin',
-        loadComponent: () => import('./admin/admin-page').then((m) => m.AdminPage),
-      },
-    ],
+    path: 'stats',
+    loadComponent: () => import('./stats/stats-page').then((m) => m.StatsPage),
+  },
+  {
+    path: 'rooms',
+    loadChildren: () => import('./rooms/rooms.routes'), // Routen-Datei mit default export
   },
 ];
 ```
 
 ```ts
-// eventhub/speakers/speakers.routes.ts – die Routen des Features in einer eigenen Datei
+// rooms/rooms.routes.ts – die Routen des Features in einer eigenen Datei
+import { Routes } from '@angular/router';
+import { RoomDetail } from './room-detail';             // innerhalb des Features: statisch
+import { RoomList } from './room-list';
+
 export default [
-  { path: '', component: SpeakerList },   // /speakers
-  { path: ':id', component: SpeakerDetail }, // /speakers/3
+  { path: '', component: RoomList },          // /rooms
+  { path: ':roomId', component: RoomDetail }, // /rooms/4
 ] satisfies Routes;
 ```
 
 | Eigenschaft | Lädt | Rückgabe der Funktion | Einsatz |
 | --- | --- | --- | --- |
-| `loadComponent` | eine Komponente | `import('…').then((m) => m.Klasse)` oder Datei mit `export default class` | einzelne Seite (Admin) |
-| `loadChildren` | ein Array von Routen | `import('…')` bei `export default [...]`, sonst `.then((m) => m.ROUTES)` | Feature mit mehreren Seiten (Speaker-Liste + Detail) |
+| `loadComponent` | eine Komponente | `import('…').then((m) => m.Klasse)` oder Datei mit `export default class` | einzelne Seite (Statistik) |
+| `loadChildren` | ein Array von Routen | `import('…')` bei `export default [...]`, sonst `.then((m) => m.ROUTES)` | Feature mit mehreren Seiten (Räume-Liste + Detail) |
 
-Gleicher Build danach:
+Innerhalb der Routen-Datei eines Features sind statische Imports richtig: Die ganze Datei ist bereits ein Lazy Chunk.
+
+Nach dem Umbau ergänzt `ng build` eine zweite Tabelle (Aufbau, Größen je nach App):
 
 ```text
-Initial chunk files | Names           |  Raw size | Estimated transfer size
-main-DRF3KWKK.js    | main            | 292.97 kB |                80.38 kB
-styles-YGSHSUSE.css | styles          |   1.75 kB |               644 bytes
+Initial chunk files | Names         |  Raw size | Estimated transfer size
+main-….js           | main          |   kleiner |                 kleiner
+styles-….css        | styles        |       …   |                     …
 
-                    | Initial total   | 294.72 kB |                81.02 kB
+                    | Initial total |   kleiner |                 kleiner
 
-Lazy chunk files    | Names           |  Raw size | Estimated transfer size
-chunk-C7IgMoPv.js   | admin-page      |  37.81 kB |                 9.06 kB
-chunk-Vs3N4Efk.js   | speakers-routes |   1.75 kB |               804 bytes
-chunk-B1gJeuRx.js   | -               | 683 bytes |               683 bytes
+Lazy chunk files    | Names         |  Raw size | Estimated transfer size
+chunk-….js          | stats-page    |       …   |                     …
+chunk-….js          | rooms-routes  |       …   |                     …
+chunk-….js          | -             |       …   |                     …
 ```
 
-Das Start-Bundle sinkt um rund 34 kB (roh) bzw. 8 kB (übertragen). Der größte Teil ist `@angular/forms`, das nur der Admin-Editor nutzt. Hash-Namen (`-C7IgMoPv`) ändern sich bei jedem Build mit geändertem Inhalt.
+Der Name in `Names` stammt aus dem Dateinamen der Zieldatei von `import()`. Wie viel das Start-Bundle im EventHub-Workspace verliert, misst die Übung; am meisten bringt das Auslagern von Seiten mit großen Abhängigkeiten (z. B. `@angular/forms` in einem Editor). Hash-Namen (`chunk-….js`) ändern sich bei jedem Build mit geändertem Inhalt.
 
 ```mermaid
 sequenceDiagram
   participant B as Browser
   participant S as Server
   B->>S: index.html, main.js, styles.css (Initial Chunks)
-  Note over B: App zeigt /sessions
-  B->>S: Klick auf "Admin": chunk-…js (admin-page)
-  Note over B: Admin-Seite erscheint
-  B->>B: zweiter Besuch von /admin: kein neuer Download
+  Note over B: App zeigt die Startseite
+  B->>S: Klick auf "Statistik": chunk-…js (stats-page)
+  Note over B: Statistik-Seite erscheint
+  B->>B: zweiter Besuch von /stats: kein neuer Download
 ```
 
 ## Provider pro Route: Feature-State bleibt im Feature
 
-Der `SessionsStore` (Signal Store aus Lab 7.4) war mit `providedIn: 'root'` für die ganze App sichtbar. Ohne `providedIn` und mit `providers` an der Route existiert er nur im Sessions-Feature.
+Ein Signal Store (Lab 7.4) mit `providedIn: 'root'` ist für die ganze App sichtbar. Ohne `providedIn` und mit `providers` an der Route existiert er nur in diesem Feature.
 
 ```ts
-// eventhub/sessions/sessions-store.ts
-export const SessionsStore = signalStore(
-  // kein { providedIn: 'root' } mehr
-  withState({ sessions: [] as Session[], loading: false }),
+// rooms/rooms-store.ts (Beispiel)
+export const RoomsStore = signalStore(
+  // kein { providedIn: 'root' }
+  withState({ rooms: [] as Room[], loading: false }),
   // ...
 );
 
-// eventhub.routes.ts
-{ path: 'sessions', component: SessionsPage, providers: [SessionsStore] }
+// rooms/rooms.routes.ts: Store für Liste und Detail gemeinsam
+export default [
+  {
+    path: '',
+    providers: [RoomsStore],                   // gilt für diese Route und ihre Kinder
+    children: [
+      { path: '', component: RoomList },
+      { path: ':roomId', component: RoomDetail },
+    ],
+  },
+] satisfies Routes;
 ```
 
 | Registrierung | Sichtbar für | Instanz |
@@ -194,7 +202,7 @@ export const SessionsStore = signalStore(
 | `providers` an einer Route | diese Route und ihre Kinder | eine pro Route, entsteht beim ersten Aktivieren |
 | `providers` im `@Component` | diese Komponente und ihre Kinder | eine pro Komponenten-Instanz |
 
-Injiziert eine Komponente außerhalb des Features den Store, meldet Angular in der Konsole `` NG0201: No provider found for `SignalStore`. Source: Standalone[_AdminPage]. `` (`signalStore` heißt intern `SignalStore`). Die Navigation bricht ab: Die URL bleibt, der Seiteninhalt unter der Navigation verschwindet. Der Routen-Injector bleibt nach dem Verlassen der Route erhalten; der Store behält seinen Zustand. Automatisches Aufräumen gibt es als Router-Feature `withAutoCleanupInjectors()` (seit Angular 22.2).
+Injiziert eine Komponente außerhalb des Features den Store, meldet Angular in der Konsole `` NG0201: No provider found for `SignalStore`. Source: Standalone[_StatsPage]. `` (`signalStore` heißt intern `SignalStore`, hinter `Source` steht die injizierende Komponente). Die Navigation bricht ab: Die URL bleibt, der Seiteninhalt unter der Navigation verschwindet. Der Routen-Injector bleibt nach dem Verlassen der Route erhalten; der Store behält seinen Zustand. Automatisches Aufräumen gibt es als Router-Feature `withAutoCleanupInjectors()` (seit Angular 22.2).
 
 ## Lazy Loading per Route und @defer
 

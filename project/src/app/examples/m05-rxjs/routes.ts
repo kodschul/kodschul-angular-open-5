@@ -8,7 +8,7 @@ export default [
     loadComponent: () => import('./l01-marbles/example').then((m) => m.MarblesExample),
   },
   {
-    // Fehlerbild: mergeMap ohne debounceTime, jeder Tastendruck startet eine Anfrage,
+    // Fehlerbild: mergeMap mit debounceTime(0), praktisch startet jeder Tastendruck eine Anfrage,
     // alte Antworten können neue überholen
     path: 'l02-operators/ohne',
     title: 'Lab 5.2 Live-Suche mit mergeMap (Fehlerbild)',

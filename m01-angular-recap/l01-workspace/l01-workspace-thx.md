@@ -38,9 +38,29 @@ Ein lauffähiges Projekt mit Testdaten, die Startbefehle und eine Karte, wo was 
 | zoneless | Betrieb ohne zone.js: Angular prüft die Ansicht nur nach konkreten Anlässen (Event im Template, `async`-Pipe, Input-Änderung, Signal) |
 | Mock-API | kleiner Node-Server mit Testdaten, ersetzt das echte Backend im Kurs |
 
+## Modernes Angular auf einen Blick
+
+Modernes Angular meint die Bauweise, die `ng new` heute erzeugt: Standalone-Bausteine, eingebaute Template-Syntax (`@if`, `@for`), Signals und zoneless Change Detection. Bestandsprojekte stecken oft noch in der NgModule-Ära und mischen beide Welten.
+
+**Bild dazu:** Mit NgModules teilen sich viele Komponenten einen Gemeinschaftsschrank (`SharedModule`): Jede bekommt alles, was darin liegt, und niemand weiß genau, wer was braucht. Standalone packt jede Komponente ihren eigenen Koffer (`imports`) mit genau dem, was ihr Template verwendet (Lab 2.1).
+
+| Version | Erschienen | Was sich für den Alltag geändert hat |
+| --- | --- | --- |
+| ≤ v16 | bis Mai 2023 (v16: 03.05.2023) | NgModule-Ära: `NgModule`, `*ngIf`/`*ngFor`, `@Input`/`@Output`, zone.js |
+| v17 | 08.11.2023 | Control Flow (`@if`, `@for`, `@switch`) und `@defer` eingeführt (Developer Preview) |
+| v18 | 22.05.2024 | Control Flow und `@defer` stabil |
+| v19 | 19.11.2024 | Standalone ist Default, `standalone: true` entfällt |
+| v20 | 28.05.2025 | Dateinamen ohne `.component` (`app.ts`), `provideBrowserGlobalErrorListeners()` |
+| v21 | 19.11.2025 | neue Apps zoneless, Vitest als Test-Runner in `ng new` |
+| v22 | 03.06.2026 | `OnPush` als Default für Komponenten ohne Angabe; Kurs-Stand 22.2 |
+
+Bis v22 erschien alle sechs Monate eine Major-Version, ab v22 eine pro Jahr; v23 ist für etwa Juni 2027 angekündigt (Stand: 30.10.2026).
+
+_Quellen: Release-Tabelle [angular.dev/reference/releases](https://angular.dev/reference/releases) (v20–v22, Zeitplan), GitHub-Releases [angular/angular](https://github.com/angular/angular/releases) (v16–v19), [Angular-Blog zu v18](https://blog.angular.dev/angular-v18-is-now-available-e79d5ac0affe) (Control Flow und `@defer` stabil), abgerufen am 30.10.2026._
+
 ## Was `ng new` heute erzeugt
 
-Ein mit Angular CLI 22 erzeugtes Projekt (Grundlage des Kurs-Projekts `output/project/`):
+Ein mit Angular CLI 22 erzeugtes Projekt (Grundlage des Kurs-Projekts `project/`):
 
 ```text
 project/
@@ -98,7 +118,7 @@ export class App {}
 | App-Konfiguration | `AppModule` mit `imports`/`providers` | `app.config.ts` mit `providers` |
 | Routen | `app-routing.module.ts` mit `RouterModule.forRoot` | `app.routes.ts` als `Routes`-Array |
 | Komponenten | in `declarations` eines Moduls | standalone, eigene `imports` |
-| Template-Syntax | `*ngIf`, `*ngFor` | `@if`, `@for` (seit v17) |
+| Template-Syntax | `*ngIf`, `*ngFor` | `@if`, `@for` (seit v17, stabil seit v18) |
 | Change Detection | zone.js in `polyfills` | zoneless (Default seit v21), kein zone.js im `angular.json` |
 | Strategie ohne Angabe von `changeDetection` | `Default` | `OnPush` (v22); `Default` heißt jetzt `Eager` |
 | Unit-Tests | Karma + Jasmine | Vitest über `ng test` (`@angular/build:unit-test`) |
@@ -132,9 +152,9 @@ sessions$ = this.api.getSessions();
 
 ## Control Flow im Recap
 
-Die Kurs-Beispiele nutzen ab dem ersten Tag die eingebaute Template-Syntax (stabil seit Angular 17). Sie braucht keinen Import. Lab 3.1 vertieft sie (`track`, `@empty`, `@switch`, `@let`) und migriert Altcode.
+Die Kurs-Beispiele nutzen ab dem ersten Tag die eingebaute Template-Syntax (eingeführt in Angular 17, stabil seit Angular 18). Sie braucht keinen Import. Lab 3.1 vertieft sie (`track`, `@empty`, `@switch`, `@let`) und migriert Altcode.
 
-| Klassisch | Seit v17 |
+| Klassisch | Seit v17 (stabil seit v18) |
 | --- | --- |
 | `<div *ngIf="sessions$ \| async as sessions; else loading">` | `@if (sessions$ \| async; as sessions) { … } @else { … }` |
 | `<li *ngFor="let s of sessions">` | `@for (s of sessions; track s.id) { <li>…</li> }` |
@@ -144,7 +164,7 @@ Die Kurs-Beispiele nutzen ab dem ersten Tag die eingebaute Template-Syntax (stab
 ## Das Kurs-Repo
 
 ```text
-output/project/
+project/
 ├── api/                  Mock-API: npm run api -> http://localhost:3000
 ├── public/config.json    Laufzeit-Konfiguration (Lab 2.2)
 ├── src/app/

@@ -104,20 +104,23 @@ Cypress 16 trennt öffentliche Werte (`expose`, gelesen mit `Cypress.expose()`) 
 
 ## Ein E2E-Test
 
+Beispiel auf der Testseite: ein Login mit falschem Passwort. Die Übung testet mit denselben Bausteinen den erfolgreichen Login, den Favoriten-Flow und den Ausfall der Suche.
+
 ```ts
-describe('Favoriten-Flow', () => {
+describe('Login', () => {
   const page = '/examples/m10-testing/l05-cypress';
 
-  it('zählt einen gesuchten Favoriten im Header', () => {
-    cy.login('user@eventhub.test', 'user123');                          // Login per API (unten)
-    cy.intercept({ method: 'GET', pathname: '/sessions' }).as('search'); // nur beobachten
+  it('zeigt einen Hinweis bei falschem Passwort', () => {
+    cy.intercept({ method: 'POST', pathname: '/auth/login' }).as('login'); // nur beobachten
     cy.visit(page);
 
-    cy.getByCy('search-input').type('testing');
-    cy.wait('@search').its('request.url').should('include', 'q=testing'); // auf die Anfrage warten
+    cy.getByCy('login-email').type('user@eventhub.test');
+    cy.getByCy('login-password').type('falsch');
+    cy.getByCy('login-submit').click();
 
-    cy.getByCy('search-result').first().find('[data-cy=favorite-toggle]').click();
-    cy.getByCy('favorites-count').should('contain.text', '1');           // wiederholt bis zu 4 s
+    cy.wait('@login').its('response.statusCode').should('eq', 401); // auf die Anfrage warten
+    cy.getByCy('login-error').should('contain.text', 'falsch');     // wiederholt bis zu 4 s
+    cy.getByCy('user-name').should('not.exist');
   });
 });
 ```
@@ -134,13 +137,16 @@ Cypress-Befehle laufen nacheinander in einer Warteschlange; `should` wird so lan
 | Netzwerkausfall simulieren | `cy.intercept(…, { forceNetworkError: true })` |
 | Langsame Antwort | `cy.intercept(…, { delay: 2000, fixture: '…' })` |
 
+Beispiel: Die Testseite prüft beim Start ein gespeichertes Token mit `GET /auth/me`. Scheitert diese Anfrage, zeigt sie wieder das Login-Formular.
+
 ```ts
-it('zeigt eine Fehlermeldung bei Status 500', () => {
-  cy.intercept({ method: 'GET', pathname: '/sessions' }, { statusCode: 500 }).as('search');
-  cy.visit(page);
-  cy.getByCy('search-input').type('angular');
-  cy.wait('@search');
-  cy.getByCy('search-error').should('be.visible');
+it('zeigt das Login-Formular, wenn /auth/me scheitert', () => {
+  cy.login('user@eventhub.test', 'user123');                         // Token liegt im sessionStorage
+  cy.intercept({ method: 'GET', pathname: '/auth/me' }, { statusCode: 500 }).as('me'); // Antwort ersetzen
+  cy.visit(page);                                                    // erst jetzt fragt die Seite /auth/me
+  cy.wait('@me');
+  cy.getByCy('login-email').should('be.visible');
+  cy.getByCy('user-name').should('not.exist');
 });
 ```
 
@@ -225,4 +231,4 @@ Stand: 28.10.2026. Quellen: Browser Cypress https://docs.cypress.io/app/referenc
 - `data-cy`, `cy.intercept` mit Alias und Login per `cy.session` machen Tests schnell und stabil.
 - Fehlerfälle wie „API nicht erreichbar“ lassen sich ohne Eingriff in den Server per `cy.intercept` erzeugen.
 
-Die Übung baut den Flow „Login → Session suchen → Favorit → Header-Zähler“ und den Fehlerfall „API nicht erreichbar“ als zwei grüne E2E-Tests.
+Die Übung baut den Flow „Login → Session suchen → Favorit → Header-Zähler“ und den Fehlerfall „API nicht erreichbar“; zusammen mit dem Login-Test sind das drei grüne E2E-Tests.

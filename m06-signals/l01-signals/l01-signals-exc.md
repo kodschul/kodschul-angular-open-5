@@ -5,7 +5,7 @@
 
 ## Vorbereitung
 
-- Terminal 1 im Ordner `output/project/`: `npm start` (die Mock-API wird in diesem Lab nicht gebraucht; die Workshops stehen im Starter)
+- Terminal 1 im Ordner `project/`: `npm start` (die Mock-API wird in diesem Lab nicht gebraucht; die Workshops stehen im Starter)
 - Arbeitsdatei: `src/app/playground/playground.ts`
 - Starter: `src/app/starters/m06-l01-signals.ts`
 - Browser: http://localhost:4200/playground

@@ -5,7 +5,7 @@
 
 ## Vorbereitung
 
-- Terminal 1 im Ordner `output/project/`: `npm start` (die Mock-API wird erst in Lab 9.2 gebraucht)
+- Terminal 1 im Ordner `project/`: `npm start` (die Mock-API wird erst in Lab 9.2 gebraucht)
 - Arbeitsdatei: `src/app/playground/playground.ts`
 - Starter: `src/app/starters/m06-l04-signal-forms.ts`
 - Browser: http://localhost:4200/playground

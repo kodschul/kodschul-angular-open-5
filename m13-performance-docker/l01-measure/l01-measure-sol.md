@@ -1,6 +1,6 @@
 # Lab 13.1 – Lösung: Performance messen mit Lighthouse und DevTools
 
-Code der gemessenen App: `output/project/workspaces/eventhub-perf/`. Info-Seite in der Kurs-App: `/examples/m13-performance-docker/l01-measure`.
+Code der gemessenen App: `project/workspaces/eventhub-perf/`. Info-Seite in der Kurs-App: `/examples/m13-performance-docker/l01-measure`.
 
 Die Werte unten stammen aus einer Messung am 28.10.2026 auf einem Apple-Silicon-Laptop (Chrome headless, Lighthouse 13.6 CLI, Mobil-Profil mit simulierter Drosselung, Mock-API lokal). Eigene Werte weichen ab; entscheidend sind Größenordnung und Richtung.
 

@@ -1,6 +1,6 @@
 # Performance-und-Docker-Cheatsheet
 
-Schnellreferenz für Modul 13 (Messen, Optimieren, Container). Ordner: `output/project/workspaces/eventhub-perf/`, `eventhub-perf-fixed/`, `docker/`.
+Schnellreferenz für Modul 13 (Messen, Optimieren, Container). Ordner: `project/workspaces/eventhub-perf/`, `eventhub-perf-fixed/`, `docker/`.
 
 ## Messen
 
@@ -26,7 +26,7 @@ Schnellreferenz für Modul 13 (Messen, Optimieren, Container). Ordner: `output/p
 
 | Syntax | Wirkung |
 | --- | --- |
-| `<img ngSrc="img/hero.png" width="1400" height="700" priority>` | `NgOptimizedImage`: Platz reserviert, `fetchpriority="high"` für das LCP-Bild |
+| `<img ngSrc="img/banner.webp" width="1200" height="400" priority>` | `NgOptimizedImage`: Platz reserviert, `fetchpriority="high"` für das LCP-Bild |
 | `imports: [NgOptimizedImage]` | Direktive aus `@angular/common` |
 | `<img ngSrc="…" fill>` | Bild füllt den Container, wenn die Größe unbekannt ist |
 | `@defer (on viewport; prefetch on idle) { … }` | Komponente und ihre Bibliotheken in eigenen Chunk, Laden bei Sichtbarkeit |
@@ -40,9 +40,9 @@ Schnellreferenz für Modul 13 (Messen, Optimieren, Container). Ordner: `output/p
 
 | Eintrag | Wirkung |
 | --- | --- |
-| `{ "type": "initial", "maximumWarning": "350kB", "maximumError": "500kB" }` | Start-Code begrenzen |
-| `{ "type": "anyScript", "maximumWarning": "250kB", … }` | jede einzelne JS-Datei begrenzen |
-| `{ "type": "anyComponentStyle", "maximumWarning": "2kB", … }` | Stylesheet pro Komponente begrenzen |
+| `{ "type": "initial", "maximumWarning": "<kB>", "maximumError": "<kB>" }` | Start-Code begrenzen (neues Projekt: 500 kB / 1 MB) |
+| `{ "type": "anyScript", "maximumWarning": "<kB>", … }` | jede einzelne JS-Datei begrenzen |
+| `{ "type": "anyComponentStyle", "maximumWarning": "<kB>", … }` | Stylesheet pro Komponente begrenzen (neues Projekt: 4 kB / 8 kB) |
 | `maximumError` überschritten | `ng build` endet mit Exit-Code 1 |
 
 ## Dev-Warnungen
@@ -73,7 +73,7 @@ Schnellreferenz für Modul 13 (Messen, Optimieren, Container). Ordner: `output/p
 | `FROM node:24-alpine AS build` | Build-Stufe |
 | `COPY package.json package-lock.json ./` + `RUN npm ci` | Abhängigkeiten als eigene, gecachte Schicht |
 | `FROM nginx:alpine AS runtime` | Auslieferungsstufe ohne Node.js |
-| `COPY --from=build /app/dist/eventhub-perf/browser /usr/share/nginx/html` | nur Build-Ergebnis übernehmen |
+| `COPY --from=build /app/dist/<projekt>/browser /usr/share/nginx/html` | nur Build-Ergebnis übernehmen |
 | `COPY --chmod=755 … /docker-entrypoint.d/40-….sh` | Startskript, läuft vor nginx |
 | `Dockerfile.dockerignore` neben dem Dockerfile | Ignore-Datei für genau dieses Dockerfile |
 | `FROM nginxinc/nginx-unprivileged:alpine` + `USER 101` | ohne root, Port 8080 |

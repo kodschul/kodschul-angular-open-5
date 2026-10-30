@@ -1,11 +1,11 @@
 # Lab 12.2 – Lösung: Micro-Frontend mit Native Federation
 
-Ausgangszustand im Repo: `output/project/workspaces/federation-admin/` und `output/project/workspaces/federation-host/` (Aufgaben 1–4 laufen ohne Codeänderung). Die Änderungen aus Aufgabe 5–8 stehen unten. Infoseite in der Kurs-App: `/examples/m12-microfrontends-pwa/l02-native-federation`.
+Ausgangszustand im Repo: `project/workspaces/federation-admin/` und `project/workspaces/federation-host/` (Aufgaben 1–4 laufen ohne Codeänderung). Die Änderungen aus Aufgabe 5–8 stehen unten. Infoseite in der Kurs-App: `/examples/m12-microfrontends-pwa/l02-native-federation`.
 
 ## Aufgabe 1: Remote allein
 
 ```bash
-cd output/project/workspaces/federation-admin
+cd project/workspaces/federation-admin
 npx ng serve            # ➜ Local: http://localhost:4201/
 ```
 
@@ -26,7 +26,7 @@ http://localhost:4201 zeigt „federation-admin · Einzelstart auf Port 4201“,
 ## Aufgabe 2: Host
 
 ```bash
-cd output/project/workspaces/federation-host
+cd project/workspaces/federation-host
 npx ng serve            # ➜ Local: http://localhost:4200/
 ```
 

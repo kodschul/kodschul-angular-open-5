@@ -14,7 +14,7 @@
 
 ## Aufgaben
 
-1. Kopiere `src/app/starters/m07-l03-effects.ts` nach `src/app/playground/playground.ts` und den Ordner `src/app/starters/m07-l03-effects/` nach `src/app/playground/m07-l03-effects/`. Lies `sessions.actions.ts` und `sessions.feature.ts`; neu sind `Reload Clicked`, `Save Favorites Clicked` und die beiden `Favorites Saved`-Actions. Bis Aufgabe 3 zeigt `/playground` dauerhaft „Lade Sessions …“ ohne Liste: Die Komponente meldet `opened`, aber noch lädt kein Effect.
+1. Kopiere `src/app/starters/m07-l03-effects.ts` nach `src/app/playground/playground.ts` und den Ordner `src/app/starters/m07-l03-effects/` nach `src/app/playground/m07-l03-effects/`. Lies `sessions.actions.ts` und `sessions.feature.ts`; neu sind `Reload Clicked`, `Save Favorites Clicked` und die beiden `Favorites Saved`-Actions. Bis Aufgabe 3 hängt an der Route `playground` noch der Stand aus Lab 7.2: Mit fertigem Lab 7.2 zeigt `/playground` dauerhaft „Lade Sessions …“ ohne Liste (die Komponente meldet `opened`, aber noch lädt kein Effect; ein leeres Badge „Favoriten gespeichert“ ist normal). Ohne Provider aus Lab 7.2 meldet die Konsole `NG0201: No provider found for Store`. Beides behebt Aufgabe 3.
 2. Schreibe in `sessions.effects.ts` den funktionalen Effect `loadSessions`: Er reagiert auf `opened` und `reloadClicked`, lädt per `SessionApi.getSessions()` mit `switchMap` und liefert `sessionsLoadedSuccess` oder, per `catchError` im inneren Observable, `sessionsLoadedFailure` mit dem Text `Laden fehlgeschlagen (HTTP <Status>)`, also z. B. `Laden fehlgeschlagen (HTTP 500)`.
 3. Ändere in `src/app/app.routes.ts` die Provider der Route `playground`:
 
@@ -31,7 +31,7 @@
    Imports: `sessionsFeature` aus `./playground/m07-l03-effects/sessions.feature`, `import * as sessionsEffects from './playground/m07-l03-effects/sessions.effects'`, `provideEffects` aus `@ngrx/effects`, `provideEffectsRuntimeAtRoute` aus `./examples/m07-ngrx/shared/effects-at-route`. `provideEffectsRuntimeAtRoute()` braucht nur die Kurs-App, weil hier jede Route einen eigenen Store hat (siehe Theorie).
 4. Lade `/playground` neu. Setze danach den Haken „API-Fehler simulieren“ und klicke „Neu laden“. Klicke nach dem Entfernen des Hakens auf „Erneut versuchen“.
 5. Schreibe den Effect `saveFavorites`: Er reagiert auf `saveFavoritesClicked`, ruft `FavoritesStorage.save(favoriteIds)` mit `exhaustMap` auf und liefert `favoritesSavedSuccess` oder `favoritesSavedFailure`. Markiere zwei Favoriten und doppelklicke schnell auf „Favoriten speichern“.
-6. Schreibe den Effect `logErrors` mit `dispatch: false`, der bei `sessionsLoadedFailure` und `favoritesSavedFailure` den Fehlertext per `console.error` ausgibt. Prüfe ihn mit dem Fehlerschalter aus Aufgabe 4.
+6. Schreibe den Effect `logErrors` mit `dispatch: false`, der bei `sessionsLoadedFailure` und `favoritesSavedFailure` den Fehlertext mit dem Präfix `[Sessions]` per `console.error` ausgibt. Prüfe ihn mit dem Fehlerschalter aus Aufgabe 4.
 7. Prüfe im Tab **Redux** die Reihenfolge der Actions für Laden, Fehler und Speichern.
 
 ## Checkpoint

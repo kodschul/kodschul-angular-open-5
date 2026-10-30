@@ -1,13 +1,13 @@
 # Lab 13.3 – Lösung: Containerisierung mit Docker
 
-Fertige Dateien: `output/project/workspaces/docker/` (`Dockerfile`, `Dockerfile.dockerignore`, `Dockerfile.unprivileged`, `nginx/default.conf`, `runtime/`). Info-Seite in der Kurs-App: `/examples/m13-performance-docker/l03-docker`.
+Fertige Dateien: `project/workspaces/docker/` (`Dockerfile`, `Dockerfile.dockerignore`, `Dockerfile.unprivileged`, `nginx/default.conf`, `runtime/`). Info-Seite in der Kurs-App: `/examples/m13-performance-docker/l03-docker`.
 
 Die Ausgaben unten sind gekürzt und zeigen das erwartete Muster; Zeiten, Hashes und Größen hängen von Rechner und Basis-Image-Version ab.
 
 ## Aufgabe 1: Arbeitsordner
 
 ```bash
-cd output/project/workspaces
+cd project/workspaces
 cp -R docker/starter docker/playground
 ```
 

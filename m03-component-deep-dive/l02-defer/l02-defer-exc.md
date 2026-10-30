@@ -5,8 +5,8 @@
 
 ## Vorbereitung
 
-- Terminal 1 im Ordner `output/project/`: `npm run api`.
-- Terminal 2 im Ordner `output/project/`: `npx ng serve --no-hmr` (ohne HMR, sonst lädt der Dev-Server die `@defer`-Bereiche sofort mit; ein laufendes `npm start` vorher mit Strg+C beenden).
+- Terminal 1 im Ordner `project/`: `npm run api`.
+- Terminal 2 im Ordner `project/`: `npx ng serve --no-hmr` (ohne HMR, sonst lädt der Dev-Server die `@defer`-Bereiche sofort mit; ein laufendes `npm start` vorher mit Strg+C beenden).
 - Arbeitsdatei: `src/app/playground/playground.ts`
 - Starter: `src/app/starters/m03-l02-defer.ts` plus Ordner `src/app/starters/m03-l02-defer/` (`speaker-bio.ts`, `session-comments.ts`)
 - Browser: http://localhost:4200/playground, DevTools mit Tab „Network“ (Filter `JS`)
@@ -19,13 +19,13 @@
 4. Lege um `<app-session-comments …/>` einen `@defer (on interaction)`-Block. Der `@placeholder` enthält einen Button „Kommentare anzeigen“; ergänze `@loading (minimum 500ms)`.
 5. Lade neu, scrolle zum Speaker-Bereich und klicke auf „Kommentare anzeigen“. Beobachte im Network-Tab, wann welche JS-Datei nachgeladen wird.
 6. Stelle die Drosselung im Network-Tab auf „Slow 4G“, lade neu und wiederhole Schritt 5: Die `@loading`-Texte werden sichtbar. Stelle die Drosselung zurück.
-7. Lass den Dev-Server laufen. Führe in einem dritten Terminal im Ordner `output/project/` `npx ng build --verbose` aus und suche in „Lazy chunk files“ die Einträge `speaker-bio` und `session-comments`. Mache einen Screenshot dieser Zeilen.
+7. Lass den Dev-Server laufen. Führe in einem dritten Terminal im Ordner `project/` `npx ng build --verbose` aus und suche in „Lazy chunk files“ die Einträge `speaker-bio` und `session-comments`. Mache einen Screenshot dieser Zeilen.
 
 ## Checkpoint
 
 - Nach Schritt 3: Beim Laden steht der Placeholder-Text; erst beim Scrollen erscheint das Profil, im Network-Tab kommt eine `chunk-….js` dazu.
 - Nach Schritt 4: Die Kommentare erscheinen erst nach dem Klick auf den Button.
-- Die Build-Ausgabe nennt `speaker-bio` und `session-comments` unter „Lazy chunk files“.
+- Die Build-Ausgabe nennt `speaker-bio` und `session-comments` unter „Lazy chunk files“. Das fertige Beispiel unter `src/app/examples/` erzeugt Chunks mit denselben Namen; der Nachweis für die eigene Lösung ist deshalb der Network-Tab aus Aufgabe 5.
 
 ## Abschlusskriterien
 

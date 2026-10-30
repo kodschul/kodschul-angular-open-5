@@ -5,8 +5,8 @@
 
 ## Vorbereitung
 
-- Terminal 1 im Ordner `output/project/`: `npm run api`.
-- Terminal 2 im Ordner `output/project/workspaces/eventhub-lab/`: `npx ng serve` (Port 4201).
+- Terminal 1 im Ordner `project/`: `npm run api`.
+- Terminal 2 im Ordner `project/workspaces/eventhub-lab/`: `npx ng serve` (Port 4201).
 - Arbeitsdateien: `workspaces/eventhub-lab/src/app/app.config.ts`, `workspaces/eventhub-lab/src/app/eventhub/eventhub.routes.ts`, neue Datei `workspaces/eventhub-lab/src/app/eventhub/delayed-preloading.ts`
 - Starter: Ergebnis von Lab 8.1. Ohne dieses Ergebnis den Ordner `src/app/examples/m08-advanced-routing/l01-lazy-loading/eventhub/` nach `workspaces/eventhub-lab/src/app/` kopieren.
 - Browser: http://localhost:4201, DevTools mit Tab „Network“ (Filter `JS`, „Disable cache“ aktiv) und Tab „Console“.

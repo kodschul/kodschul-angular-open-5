@@ -1,8 +1,8 @@
 # Lab 13.2 – Lösung: Optimieren und nachmessen
 
-Fertiger Stand: `output/project/workspaces/eventhub-perf-fixed/` (Angular-Projektname bleibt `eventhub-perf`, Build in `dist/eventhub-perf/browser`). Info-Seite in der Kurs-App: `/examples/m13-performance-docker/l02-optimize`.
+Fertiger Stand: `project/workspaces/eventhub-perf-fixed/` (Angular-Projektname bleibt `eventhub-perf`, Build in `dist/eventhub-perf/browser`). Info-Seite in der Kurs-App: `/examples/m13-performance-docker/l02-optimize`.
 
-Alle Unterschiede auf einen Blick (im Ordner `output/project/`):
+Alle Unterschiede auf einen Blick (im Ordner `project/`):
 
 ```bash
 git diff --no-index workspaces/eventhub-perf/src workspaces/eventhub-perf-fixed/src

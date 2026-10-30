@@ -176,6 +176,7 @@ dist/federation-admin/browser/
 | Symptom | Ursache | Lösung |
 | --- | --- | --- |
 | `Port 4200 is already in use` | Kurs-App läuft noch | Kurs-App beenden oder Host mit `--port 4300` starten |
+| `Port 4201 is already in use` beim Start des Remotes | Dev-Server von `workspaces/eventhub-lab/` (Lab 8.1–9.3) nutzt ebenfalls Port 4201 | dort mit Strg+C beenden; sonst Remote mit `npx ng serve --port 4202` starten und die URL in `public/federation.manifest.json` des Hosts auf Port 4202 ändern |
 | `/admin` bleibt leer, Konsole: `NFError: Failed to load module federation-admin/./routes` | Remote läuft nicht oder Manifest-URL falsch | Remote starten, `federation.manifest.json` prüfen; Ersatzroute per `.catch()` |
 | Änderung am Remote nicht sichtbar | Browser-Cache oder Remote nicht neu gebaut | Remote-Terminal prüfen, Host-Seite neu laden |
 | Fehler zu Versionskonflikt beim Start | `strictVersion` und unterschiedliche Versionen in Host und Remote | Versionen angleichen (z. B. beide `^22.2.0`) |

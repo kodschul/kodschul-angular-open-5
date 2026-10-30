@@ -7,7 +7,7 @@
 Der Service Worker läuft nur im Produktions-Build, nicht mit `ng serve`.
 
 ```bash
-# Mock-API im Kursprojekt (output/project/)
+# Mock-API im Kursprojekt (project/)
 npm run api
 
 # in diesem Ordner

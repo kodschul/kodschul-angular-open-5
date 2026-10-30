@@ -19,9 +19,9 @@ Schnellreferenz für Modul 11 (Nx Workspace, Angular Library, Angular Elements).
 
 | Befehl | Wirkung |
 | --- | --- |
-| `npx nx g @nx/angular:library libs/shared/ui --tags=type:ui,scope:shared --prefix=ui` | Angular-Library mit Tags, Alias `@<workspace>/ui` |
+| `npx nx g @nx/angular:library libs/<bereich>/<name> --tags=type:<typ>,scope:<bereich> --prefix=<präfix>` | Angular-Library mit Tags, Alias `@<workspace>/<name>` |
 | `npx nx g @nx/js:library libs/shared/models --bundler=none --unitTestRunner=none --tags=type:util` | reine TypeScript-Library |
-| `npx nx g @nx/angular:component libs/shared/ui/src/lib/<name>/<name>` | Komponente in einer Library |
+| `npx nx g @nx/angular:component libs/<bereich>/<lib>/src/lib/<name>/<name>` | Komponente in einer Library |
 | `… --dry-run` | Dateiliste anzeigen, nichts schreiben |
 
 ## Nx: Graph, affected, Cache

@@ -41,7 +41,7 @@ Interne Hilfsfunktionen, Implementierungsdetails und alles, was sich ohne Abspra
 
 ## Workspace für eine Library anlegen
 
-Der Workspace `output/project/workspaces/eventhub-ui-lib/` entstand mit zwei Befehlen (Angular CLI 22.2.5):
+Der Workspace `project/workspaces/eventhub-ui-lib/` entstand mit zwei Befehlen (Angular CLI 22.2.5):
 
 ```bash
 npx @angular/cli@22 new eventhub-ui-lib --no-create-application --skip-git
@@ -49,7 +49,7 @@ cd eventhub-ui-lib
 npx ng generate library eventhub-ui --prefix=eh
 ```
 
-`--no-create-application` legt einen leeren Workspace ohne App an. `ng new` funktioniert nur außerhalb eines anderen Angular-Workspace; innerhalb von `output/project/` meldet die CLI „This command is not available when running the Angular CLI inside a workspace“.
+`--no-create-application` legt einen leeren Workspace ohne App an. `ng new` funktioniert nur außerhalb eines anderen Angular-Workspace; innerhalb von `project/` meldet die CLI „This command is not available when running the Angular CLI inside a workspace“.
 
 ```text
 eventhub-ui-lib/
@@ -139,10 +139,19 @@ npm install ../eventhub-ui-lib/dist/eventhub-ui/eventhub-ui-0.1.0.tgz
 ```
 
 ```ts
+// Beispiel: Sitzplatz-Auswahl in einer beliebigen App, die das Paket installiert hat
 import { SessionBadge, TicketCounter } from 'eventhub-ui';
-// im Template:
-// <eh-session-badge level="Fortgeschritten" />
-// <eh-ticket-counter [formControl]="tickets" [max]="4" />
+
+@Component({
+  imports: [ReactiveFormsModule, SessionBadge, TicketCounter],   // Import wie bei jeder Standalone-Komponente
+  template: `
+    <eh-session-badge level="Experte" hint="Nur mit Vorkenntnissen" />
+    <eh-ticket-counter [formControl]="seats" [min]="2" [max]="10" />
+  `,
+})
+export class SeatPicker {
+  protected readonly seats = new FormControl(2, { nonNullable: true });
+}
 ```
 
 npm kopiert den Inhalt des Tarballs nach `node_modules/eventhub-ui`. Eine neue Library-Version braucht deshalb Build, `npm pack` und erneutes `npm install`.
@@ -164,7 +173,7 @@ Import in der App: `import { fakeSession } from 'eventhub-ui/testing';`
 | Änderung | Version | Beispiel |
 | --- | --- | --- |
 | Fehlerbehebung ohne API-Änderung | PATCH `0.1.0 → 0.1.1` | Farbe im Badge korrigiert |
-| neue, optionale Funktion | MINOR `0.1.0 → 0.2.0` | neue Eingabe `hint` mit Standardwert |
+| neue, optionale Funktion | MINOR `0.1.0 → 0.2.0` | neue Eingabe `size` mit Standardwert |
 | Bruch der API | MAJOR `1.4.0 → 2.0.0` | Selektor umbenannt, Eingabe entfernt, Angular-Major angehoben |
 
 Vor `1.0.0` gilt die API als instabil; viele Teams starten mit `0.x` und gehen mit dem ersten verbindlichen Nutzer auf `1.0.0`.

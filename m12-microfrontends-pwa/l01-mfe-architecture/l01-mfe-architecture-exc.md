@@ -5,7 +5,7 @@
 
 ## Vorbereitung
 
-- Datei anlegen: `mfe-entscheidung.md` (Ort frei, z. B. `output/project/mfe-entscheidung.md`).
+- Datei anlegen: `mfe-entscheidung.md` (Ort frei, z. B. `project/mfe-entscheidung.md`).
 - Grundlage: Vergleichstabelle und Entscheidungskriterien aus der Theorie dieses Labs.
 - Infoseite der Kurs-App: http://localhost:4200/examples/m12-microfrontends-pwa/l01-mfe-architecture (optional).
 

@@ -39,14 +39,15 @@ Im Idealfall Fachleute oder die Nutzenden selbst, ohne neues Release. Dafür mus
 
 ## Konfiguration als Daten
 
+Beispiel aus einer anderen Ecke von EventHub: Eine Hinweis-Leiste zeigt am Konferenztag Meldungen, deren Art und Reihenfolge das Orga-Team per JSON festlegt. Die Übung wendet dasselbe Muster auf das Dashboard an.
+
 ```jsonc
-// public/dashboard-widgets.json
+// public/notices.json (Beispiel)
 {
-  "title": "Mein EventHub-Dashboard",
-  "widgets": [
-    { "type": "stats", "inputs": { "title": "Auslastung gesamt" } },
-    { "type": "next-session", "inputs": { "track": "Frontend" } },
-    { "type": "favorites", "inputs": { "sessionIds": [3, 6, 7] } }
+  "notices": [
+    { "type": "info", "inputs": { "text": "WLAN: eventhub-guest" } },
+    { "type": "room-change", "inputs": { "session": "Signals in der Praxis", "room": "Saal 2" } },
+    { "type": "survey", "inputs": { "url": "/feedback" } }
   ]
 }
 ```
@@ -54,59 +55,68 @@ Im Idealfall Fachleute oder die Nutzenden selbst, ohne neues Release. Dafür mus
 | Feld | Bedeutung |
 | --- | --- |
 | `type` | Schlüssel in der Registry |
-| `inputs` | Werte für die `input()`-Felder des Widgets; Namen müssen exakt passen |
+| `inputs` | Werte für die `input()`-Felder der Komponente; Namen müssen exakt passen |
 
-Dateien in `public/` liefert der Dev-Server unter `/` aus (`/dashboard-widgets.json`); eine Änderung braucht keinen neuen Build.
+Dateien in `public/` liefert der Dev-Server unter `/` aus (`/notices.json`); eine Änderung braucht keinen neuen Build.
 
 ## Registry mit import()
 
 ```ts
-// examples/m08-advanced-routing/l03-dynamic-components/dashboard-config.ts
-export const WIDGET_REGISTRY: Record<string, () => Promise<Type<unknown>>> = {
-  stats: () => import('./widgets/stats-widget').then((m) => m.StatsWidget),
-  'next-session': () => import('./widgets/next-session-widget').then((m) => m.NextSessionWidget),
-  favorites: () => import('./widgets/favorites-widget').then((m) => m.FavoritesWidget),
+// notices/notice-registry.ts (Beispiel)
+export interface NoticeConfig {
+  type: string;
+  inputs?: Record<string, unknown>;
+}
+
+export const NOTICE_REGISTRY: Record<string, () => Promise<Type<unknown>>> = {
+  info: () => import('./info-notice').then((m) => m.InfoNotice),
+  'room-change': () => import('./room-change-notice').then((m) => m.RoomChangeNotice),
+  survey: () => import('./survey-notice').then((m) => m.SurveyNotice),
 };
 
-export function loadWidget(type: string): Promise<Type<unknown>> {
-  const loader = WIDGET_REGISTRY[type] ?? (() => import('./widgets/unknown-widget').then((m) => m.UnknownWidget));
+export function loadNotice(type: string): Promise<Type<unknown>> {
+  const loader = NOTICE_REGISTRY[type] ?? (() => import('./plain-notice').then((m) => m.PlainNotice)); // Fallback
   return loader();
 }
 ```
 
-`Type<unknown>` ist der Typ „irgendeine Komponentenklasse“. Ein Widget ist eine normale Komponente mit `input()` (Lab 6.3):
+`Type<unknown>` ist der Typ „irgendeine Komponentenklasse“. Jeder Pfad steht ausgeschrieben in `import()`; nur so legt der Build pro Datei einen eigenen Chunk an. Eine dynamisch gerenderte Komponente ist eine normale Komponente mit `input()` (Lab 6.3):
 
 ```ts
-// widgets/favorites-widget.ts (Auszug)
-export class FavoritesWidget {
-  readonly sessionIds = input<number[]>([]);
-  private readonly sessions = toSignal(inject(SessionApi).getSessions(), { initialValue: [] });
-  protected readonly favorites = computed(() => this.sessions().filter((s) => this.sessionIds().includes(s.id)));
+// notices/room-change-notice.ts (Auszug)
+@Component({
+  selector: 'app-room-change-notice',
+  template: `<p><strong>Raumwechsel:</strong> {{ session() }} jetzt in {{ room() }}</p>`,
+})
+export class RoomChangeNotice {
+  readonly session = input('');
+  readonly room = input('');
 }
 ```
 
 ## Variante 1: NgComponentOutlet im Template
 
 ```ts
-// examples/m08-advanced-routing/l03-dynamic-components/example.ts (Auszug)
+// notices/notice-bar.ts (Beispiel)
 @Component({
+  selector: 'app-notice-bar',
   imports: [NgComponentOutlet],
   template: `
-    @for (w of widgets.value() ?? []; track $index) {
-      <section class="card">
-        <ng-container *ngComponentOutlet="w.component; inputs: w.inputs" />
-      </section>
+    @for (n of notices.value() ?? []; track $index) {
+      <aside class="card">
+        <ng-container *ngComponentOutlet="n.component; inputs: n.inputs" />
+      </aside>
     }
   `,
 })
-export class DynamicDashboardExample {
-  readonly config = input.required<DashboardConfig>();
+export class NoticeBar {
+  readonly config = input.required<NoticeConfig[]>();
 
   // resource() aus Lab 6.2: lädt alle Klassen, sobald config feststeht
-  protected readonly widgets = resource({
-    params: () => this.config().widgets,
+  protected readonly notices = resource({
+    params: () => this.config(),
     loader: ({ params }) =>
-      Promise.all(params.map(async (w) => ({ component: await loadWidget(w.type), inputs: w.inputs ?? {} }))),
+      Promise.all(params.map(async (n) => ({ component: await loadNotice(n.type), inputs: n.inputs ?? {} }))),
   });
 }
 ```
@@ -114,8 +124,8 @@ export class DynamicDashboardExample {
 ## Variante 2: ViewContainerRef.createComponent im Code
 
 ```ts
-// examples/m08-advanced-routing/l03-dynamic-components/example-vcr.ts (Auszug)
-template: `<div class="grid"><ng-container #host /></div>`
+// notices/notice-bar-vcr.ts (Auszug)
+template: `<div class="stack"><ng-container #host /></div>`
 
 private readonly host = viewChild.required('host', { read: ViewContainerRef });
 
@@ -123,11 +133,11 @@ ngAfterViewInit(): void {                     // erst jetzt existiert #host
   void this.render(this.config(), this.host());
 }
 
-private async render(config: DashboardConfig, vcr: ViewContainerRef): Promise<void> {
+private async render(config: NoticeConfig[], vcr: ViewContainerRef): Promise<void> {
   vcr.clear();
-  for (const widget of config.widgets) {
-    const ref = vcr.createComponent(await loadWidget(widget.type));
-    for (const [name, value] of Object.entries(widget.inputs ?? {})) {
+  for (const notice of config) {
+    const ref = vcr.createComponent(await loadNotice(notice.type));
+    for (const [name, value] of Object.entries(notice.inputs ?? {})) {
       ref.setInput(name, value);       // wie [name]="value" im Template
     }
   }
@@ -146,16 +156,16 @@ private async render(config: DashboardConfig, vcr: ViewContainerRef): Promise<vo
 
 ```mermaid
 flowchart LR
-  J["dashboard-widgets.json"] --> R["Resolver lädt JSON"]
+  J["Konfiguration (JSON)"] --> R["Resolver oder httpResource lädt JSON"]
   R --> C["input config"]
   C --> L["Registry: import() je Typ"]
   L --> O["NgComponentOutlet / createComponent"]
-  O --> W["Widget mit Inputs"]
+  O --> W["Komponente mit Inputs"]
 ```
 
 ## Router-Inputs und Resolver
 
-Die Beispielroute lädt die Konfiguration per Resolver, bevor die Komponente erscheint. `withComponentInputBinding()` (Lab 2.2) übergibt das Ergebnis an das gleichnamige `input()`.
+Die Dashboard-Beispielroute der Kurs-App (`/examples/m08-advanced-routing/l03-dynamic-components`) lädt ihre Konfiguration per Resolver, bevor die Komponente erscheint. `withComponentInputBinding()` (Lab 2.2) übergibt das Ergebnis an das gleichnamige `input()`.
 
 ```ts
 // dashboard-config.resolver.ts

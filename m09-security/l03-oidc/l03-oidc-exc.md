@@ -5,10 +5,13 @@
 
 ## Vorbereitung
 
-- Keycloak lokal mit Docker starten: im Ordner `output/project/workspaces/keycloak/` `docker compose up`. Bereit, sobald http://localhost:8080/realms/eventhub/.well-known/openid-configuration JSON liefert.
-- Alternativ eine zentrale Keycloak-Instanz (falls bereitgestellt): deren Adresse gilt statt `localhost:8080`. Die Redirect-URIs im Realm erlauben nur `localhost:4200`, `localhost:4201` und `localhost:4202` im eigenen Browser.
-- Terminal 1 im Ordner `output/project/`: `npm run api`.
-- Terminal 2 im Ordner `output/project/workspaces/eventhub-lab/`: `npx ng serve` (Port 4201).
+- Keycloak mit dem Realm `eventhub`, eine der beiden Varianten:
+  - **lokal:** im Ordner `project/workspaces/keycloak/` `docker compose up` ausführen; Basis-Adresse `http://localhost:8080`.
+  - **bereitgestellte Instanz:** Die Realm-Datei `workspaces/keycloak/realm/eventhub-realm.json` ist dort importiert; Basis-Adresse ist die Adresse dieser Instanz. Docker wird nicht gebraucht.
+- Keycloak ist bereit, sobald `<Basis-Adresse>/realms/eventhub/.well-known/openid-configuration` im Browser JSON liefert.
+- Die App läuft in beiden Varianten lokal auf http://localhost:4201. Die Redirect-URIs im Realm erlauben nur `localhost:4200`, `localhost:4201` und `localhost:4202`; ist 4201 belegt, den Workspace mit `npx ng serve --port 4202` starten.
+- Terminal 1 im Ordner `project/`: `npm run api`.
+- Terminal 2 im Ordner `project/workspaces/eventhub-lab/`: `npx ng serve` (Port 4201).
 - Arbeitsordner: `workspaces/eventhub-lab/src/app/`
 - Ausgangsstand: Ergebnis von Lab 9.2. Ohne dieses Ergebnis `src/app/examples/m09-security/l02-jwt/eventhub/` und `…/l02-jwt/app.config.ts` nach `workspaces/eventhub-lab/src/app/` kopieren.
 - Starter: Ordner `src/app/starters/m09-l03-oidc/` mit `oidc.config.ts` (Felder leer) und `eventhub/oidc/oidc-page.ts` (Methoden leer; Hinweis bei nicht erreichbarem Keycloak über `PublicEventsService` schon eingebaut).
@@ -19,7 +22,7 @@
 
 1. Kopiere `src/app/starters/m09-l03-oidc/oidc.config.ts` nach `workspaces/eventhub-lab/src/app/` und den Ordner `src/app/starters/m09-l03-oidc/eventhub/oidc/` nach `workspaces/eventhub-lab/src/app/eventhub/`.
 2. Öffne die Realm-Datei und notiere Realm-Name, Client-ID, PKCE-Methode, erlaubte Redirect-URIs und die beiden Benutzer mit ihren Rollen.
-3. Trage in `oidc.config.ts` `authority` (Issuer-URL des Realms) und `clientId` ein und erweitere `scope` um `profile` und `email`.
+3. Trage in `oidc.config.ts` `authority` (Issuer-URL des Realms, gebildet aus Basis-Adresse und Realm-Name) und `clientId` ein und erweitere `scope` um `profile` und `email`.
 4. Ergänze in `app.config.ts` `provideAuth({ config: oidcConfig })`. Ergänze in `eventhub.routes.ts` die Route `oidc` (Login-Seite per `loadComponent`) und in `eventhub/shell.ts` einen Link „OIDC“.
 5. Implementiere in `oidc-page.ts` den Konstruktor (`checkAuth()`, bei Erfolg `getPayloadFromIdToken()` in `idTokenClaims`, bei Fehler Hinweis „Keycloak nicht erreichbar …“ in `error`) und `login()` (`authorize()`).
 6. Zeige auf der Seite für angemeldete Personen Name, `preferred_username`, E-Mail und Rollen aus `oidc.userData().userData` an.
@@ -45,6 +48,6 @@
 
 ## Fallback
 
-- Ohne Docker und ohne erreichbaren Keycloak: Aufgaben 1–6 umsetzen, `npx ng build` muss fehlerfrei laufen; für Aufgaben 7–9 die Werte aus der Lösung (`l03-oidc-sol.md`) mit der Realm-Datei abgleichen.
+- Ohne erreichbaren Keycloak (weder lokal noch bereitgestellt): Aufgaben 1–6 umsetzen, `npx ng build` muss fehlerfrei laufen; für Aufgaben 7–9 die Werte aus der Lösung (`l03-oidc-sol.md`) mit der Realm-Datei abgleichen.
 - Ergebnis übernehmen: `src/app/examples/m09-security/l03-oidc/eventhub/`, `…/l03-oidc/app.config.ts` und `…/l03-oidc/oidc.config.ts` nach `workspaces/eventhub-lab/src/app/` kopieren (`login-form.ts` im Workspace nicht ersetzen).
 - Die Kurs-App zeigt unter `/examples/m09-security/l03-oidc` nur eine Infoseite: `provideAuth` lässt sich dort nicht pro Route einbinden.

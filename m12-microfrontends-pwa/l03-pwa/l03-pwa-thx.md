@@ -40,7 +40,7 @@ Der Service Worker lädt neue Versionen im Hintergrund und meldet sie. Die App z
 
 ## Was `ng add @angular/pwa` ändert
 
-Ausgangspunkt ist `output/project/workspaces/eventhub-pwa/`, das Ergebnis liegt in `eventhub-pwa-final/` (Angular 22.2, Stand: 28.10.2026).
+Ausgangspunkt ist `project/workspaces/eventhub-pwa/`, das Ergebnis liegt in `eventhub-pwa-final/` (Angular 22.2, Stand: 28.10.2026).
 
 ```bash
 npx ng add @angular/pwa
@@ -99,13 +99,15 @@ provideServiceWorker('ngsw-worker.js', {
   ],
   "dataGroups": [
     {
-      "name": "programm-api",
-      "urls": ["http://localhost:3000/sessions", "http://localhost:3000/speakers"],
-      "cacheConfig": { "strategy": "freshness", "maxSize": 20, "maxAge": "1d", "timeout": "3s" }
+      "name": "raumplan",
+      "urls": ["https://cdn.eventhub.example/rooms.json"],
+      "cacheConfig": { "strategy": "performance", "maxSize": 5, "maxAge": "12h" }
     }
   ]
 }
 ```
+
+Die Daten-Gruppe `raumplan` ist ein Beispiel: Der Raumplan ändert sich während einer Konferenz kaum und darf deshalb bis zu 12 Stunden aus dem Cache kommen. Für Daten, die möglichst frisch sein sollen, gilt `freshness` mit einem `timeout`, siehe Tabelle.
 
 | Feld | Bedeutung |
 | --- | --- |
@@ -115,46 +117,55 @@ provideServiceWorker('ngsw-worker.js', {
 | `strategy: freshness` | Netz zuerst; antwortet das Netz nicht innerhalb `timeout`, kommt die gespeicherte Antwort |
 | `strategy: performance` | Cache zuerst, solange jünger als `maxAge`; schnell, aber evtl. veraltet |
 | `maxSize` / `maxAge` | höchstens so viele Antworten, höchstens so alt (`1d`, `12h`, `30m`) |
+| `timeout` | nur bei `freshness`: so lange auf das Netz warten, dann Cache (`3s`, `500u` für Millisekunden) |
 
 Nur `GET`-Anfragen landen im Cache; `POST /registrations` geht immer ans Netz.
 
-## Update-Hinweis mit `SwUpdate`
+## Neue Versionen mit `SwUpdate`
+
+`SwUpdate` aus `@angular/service-worker` liefert mit `versionUpdates` ein Observable aller Update-Ereignisse. Das Beispiel zeigt eine Meldung, wenn eine neue Version nicht installiert werden konnte; der Hinweis auf eine fertig geladene Version funktioniert genauso mit einem anderen Ereignistyp.
 
 ```ts
-// src/app/update-banner.ts
+// src/app/update-error.ts (Beispiel)
+import { Component, inject, signal } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { SwUpdate, VersionInstallationFailedEvent } from '@angular/service-worker';
+import { filter } from 'rxjs';
+
 @Component({
-  selector: 'app-update-banner',
+  selector: 'app-update-error',
   template: `
-    @if (updateReady()) {
-      <div class="card row">
-        <span>Eine neue Version von EventHub ist bereit.</span>
-        <button class="btn btn-primary" (click)="reload()">Jetzt neu laden</button>
-      </div>
+    @if (failure(); as message) {
+      <p class="card muted">Die neue Version konnte nicht geladen werden: {{ message }}</p>
     }
   `,
 })
-export class UpdateBanner {
+export class UpdateError {
   private readonly swUpdate = inject(SwUpdate);
-  protected readonly updateReady = signal(false);
+  protected readonly failure = signal<string | null>(null);
 
   constructor() {
     if (this.swUpdate.isEnabled) {                       // false in ng serve
       this.swUpdate.versionUpdates
         .pipe(
-          filter((event): event is VersionReadyEvent => event.type === 'VERSION_READY'),
-          takeUntilDestroyed(),
+          // Typwächter: danach kennt TypeScript das Feld error
+          filter((event): event is VersionInstallationFailedEvent => event.type === 'VERSION_INSTALLATION_FAILED'),
+          takeUntilDestroyed(),                          // Abo endet mit der Komponente (Lab 5.3)
         )
-        .subscribe(() => this.updateReady.set(true));
+        .subscribe((event) => this.failure.set(event.error));
     }
-  }
-
-  protected reload(): void {
-    document.location.reload();                          // lädt die neue Version
   }
 }
 ```
 
-`versionUpdates` meldet `VERSION_DETECTED`, `VERSION_READY`, `VERSION_INSTALLATION_FAILED` und `NO_NEW_VERSION_DETECTED`. Der Service Worker prüft beim Laden der Seite auf Updates; `swUpdate.checkForUpdate()` prüft zusätzlich auf Wunsch, z. B. alle 30 Minuten.
+| Ereignis (`event.type`) | Typ | Bedeutung |
+| --- | --- | --- |
+| `VERSION_DETECTED` | `VersionDetectedEvent` | neue Version gefunden, Download läuft |
+| `VERSION_READY` | `VersionReadyEvent` | neue Version vollständig geladen; ein Neuladen der Seite (`document.location.reload()`) zeigt sie |
+| `VERSION_INSTALLATION_FAILED` | `VersionInstallationFailedEvent` | Download fehlgeschlagen, Grund in `error` |
+| `NO_NEW_VERSION_DETECTED` | `NoNewVersionDetectedEvent` | Prüfung ohne neue Version |
+
+Der Service Worker prüft beim Laden der Seite auf Updates; `swUpdate.checkForUpdate()` prüft zusätzlich auf Wunsch, z. B. alle 30 Minuten.
 
 ## Testen: nur im Produktions-Build
 
@@ -169,12 +180,14 @@ flowchart LR
 | Schritt | Ort |
 | --- | --- |
 | Service Worker aktiv? | DevTools › Application › Service Workers: Status „activated and is running“ |
-| Was liegt im Cache? | Application › Cache Storage: Einträge `ngsw:…:assets:app:cache` und `ngsw:…:data:programm-api:cache` (Namen gekürzt) |
+| Was liegt im Cache? | Application › Cache Storage: Einträge `ngsw:…:assets:app:cache` und je Daten-Gruppe `ngsw:…:data:<name>:cache` (Namen gekürzt) |
 | Manifest gültig? | Application › Manifest: Name, Icons, Hinweise zur Installierbarkeit |
 | Offline testen | Network › Throttling „Offline“ oder Mock-API stoppen, Seite neu laden |
 | Installieren | Symbol in der Adressleiste von Chrome/Edge (nur `https://` oder `localhost`) |
 
 `ng serve` registriert keinen Service Worker (`enabled: !isDevMode()`). Service Worker laufen nur über `https://` oder `http://localhost`.
+
+Im Workspace `eventhub-pwa` startet `npx ng serve` auf Port 4240 (in `angular.json` gesetzt, damit die Kurs-App auf Port 4200 weiterlaufen kann); der Produktions-Build läuft mit `npm run serve:dist` auf Port 8080.
 
 ## Typische Fehler
 

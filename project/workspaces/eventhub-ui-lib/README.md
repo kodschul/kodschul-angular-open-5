@@ -9,7 +9,7 @@ npx @angular/cli@22 new eventhub-ui-lib --no-create-application --skip-git
 npx ng generate library eventhub-ui --prefix=eh
 ```
 
-`ng new` funktioniert nicht innerhalb eines anderen Angular-Workspace (z. B. unter `output/project/`); neue Workspaces daher außerhalb anlegen.
+`ng new` funktioniert nicht innerhalb eines anderen Angular-Workspace (z. B. unter `project/`); neue Workspaces daher außerhalb anlegen.
 
 ## Start
 

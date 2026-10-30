@@ -49,7 +49,7 @@ mergeMap:   -----------B-A---|     A kommt zuletzt → Liste zeigt "ang"
 switchMap:  -----------B-----|     Anfrage a wird bei b abgebrochen
 ```
 
-Die Mock-API macht das Fehlerbild reproduzierbar: Der Query-Parameter `_randomDelay=1` verzögert jede Antwort zufällig um 0–1500 ms. Die Beispielroute `/examples/m05-rxjs/l02-operators/ohne` zeigt das Fehlerbild: `mergeMap` ohne `debounceTime`, also eine Anfrage pro Tastendruck.
+Die Mock-API macht das Fehlerbild reproduzierbar: Der Query-Parameter `_randomDelay=1` verzögert jede Antwort zufällig um 0–1500 ms. Die Beispielroute `/examples/m05-rxjs/l02-operators/ohne` zeigt das Fehlerbild: `mergeMap` mit Entprellung 0 ms (`debounceTime(0)`), also praktisch eine Anfrage pro Tastendruck.
 
 ```text
 GET http://localhost:3000/sessions?q=ang&_randomDelay=1
@@ -67,6 +67,19 @@ GET http://localhost:3000/sessions?q=ang&_randomDelay=1
 | `mergeMap` | startet parallel, alle laufen weiter | Ergebnisse in Ankunftsreihenfolge | unabhängige Aktionen, z. B. mehrere Uploads |
 | `concatMap` | wartet, bis das laufende fertig ist, dann das nächste | Warteschlange, Reihenfolge bleibt | Speichern in fester Reihenfolge |
 | `exhaustMap` | ignoriert neue Werte, solange eines läuft | erster gewinnt | Login-Button, Doppelklick-Schutz |
+
+Dieselbe Eingabe durch alle vier Operatoren. Jeder äußere Wert startet ein inneres Observable `----x|`: Ergebnis nach 4 Frames, Ende nach 5. Kleinbuchstaben in der Ausgabe = Ergebnis zum gleichnamigen äußeren Wert.
+
+```text
+Äußere Werte: -a--b--c-|
+switchMap:    -----------c|        b bricht a ab, c bricht b ab: nur c kommt an
+mergeMap:     -----a--b--c|        alle drei laufen parallel, jedes Ergebnis kommt an
+concatMap:    -----a----b----c|    b wartet auf das Ende von a, c auf das Ende von b
+exhaustMap:   -----a-----c|        b kommt, während a läuft: ignoriert; c startet nach dem Ende von a
+```
+
+- Das Ende `|` der Ausgabe kommt erst, wenn der äußere Strom **und** alle laufenden inneren Observables beendet sind.
+- `concatMap` liefert alles, aber am spätesten; `switchMap` liefert am wenigsten, aber nie veraltet.
 
 ## Eingaben bremsen: `debounceTime` und `distinctUntilChanged`
 

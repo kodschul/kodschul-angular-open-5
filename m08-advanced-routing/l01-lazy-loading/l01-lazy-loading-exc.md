@@ -5,9 +5,9 @@
 
 ## Vorbereitung
 
-- Terminal 1 im Ordner `output/project/`: `npm run api`.
-- Terminal 2 im Ordner `output/project/workspaces/eventhub-lab/`: `npx ng serve` (Port 4201). Die Kurs-App (`npm start`, Port 4200) darf parallel laufen.
-- Terminal 3 im Ordner `output/project/workspaces/eventhub-lab/` für `npx ng build`.
+- Terminal 1 im Ordner `project/`: `npm run api`.
+- Terminal 2 im Ordner `project/workspaces/eventhub-lab/`: `npx ng serve` (Port 4201). Die Kurs-App (`npm start`, Port 4200) darf parallel laufen.
+- Terminal 3 im Ordner `project/workspaces/eventhub-lab/` für `npx ng build`.
 - Arbeitsordner: `workspaces/eventhub-lab/src/app/eventhub/`
 - Starter: Ausgangszustand des Workspace; Kopie zum Zurücksetzen in `src/app/starters/m08-l01-lazy-loading/` (Ordner `eventhub/` und `app.config.ts`).
 - Browser: http://localhost:4201, DevTools mit Tab „Network“ (Filter `JS`).

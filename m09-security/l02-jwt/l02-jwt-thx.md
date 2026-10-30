@@ -41,7 +41,7 @@ Wenn die Person sie ohnehin nicht nutzen darf, z. B. den Admin-Bereich ohne Admi
 
 ## Arbeitsumgebung
 
-Interceptoren und Guards gehören in die Root-Konfiguration und die Root-Routen. Die Übung arbeitet deshalb wie Lab 8.1–8.2 im Workspace `workspaces/eventhub-lab/` (Port 4201). Das Login-Formular kommt aus Lab 6.4 (`LoginFormComponent`, Output `submitted` mit `{ email, password }`).
+Interceptoren und Guards gehören in die Root-Konfiguration und die Root-Routen. Die Übung arbeitet deshalb wie Lab 8.1–8.2 im Workspace `workspaces/eventhub-lab/`: `npx ng serve` im Workspace startet die App auf http://localhost:4201 (fest in `angular.json`; die Kurs-App bleibt auf 4200). Das Login-Formular kommt aus Lab 6.4 (`LoginFormComponent`, Output `submitted` mit `{ email, password }`).
 
 ```mermaid
 flowchart LR
@@ -170,6 +170,7 @@ done(): void {
 | Admin mit User-Rolle: Fehler „Cannot match any routes“ (Workspace) bzw. Startseite (Kurs-App) | `canMatch` liefert `false`, keine zweite Route mit gleichem Pfad | Route „Kein Zugriff“ mit Pfad `admin` dahinter |
 | Nach Login landet man immer auf Sessions | `returnUrl` nicht als `input()` gelesen oder `withComponentInputBinding` fehlt | Input-Name = Query-Parameter-Name |
 | Formular reagiert nicht | falscher Selektor oder Output-Name des Formulars aus Lab 6.4 | `<app-login-form (submitted)="…">` |
+| `npx ng serve` im Workspace meldet „Port 4201 is already in use“ | ein anderer Dev-Server belegt 4201 (z. B. eine zweite Instanz des Workspace oder ein anderer Workspace mit demselben Port) | anderen Prozess beenden oder `npx ng serve --port 4202`, dann http://localhost:4202 öffnen; die Rückfrage nach einem anderen Port mit „n“ beantworten, weil ein Zufallsport in Lab 9.3 nicht in den Redirect-URIs von Keycloak steht |
 
 ## Vertiefung
 

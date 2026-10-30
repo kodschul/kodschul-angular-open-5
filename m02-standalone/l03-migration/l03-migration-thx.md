@@ -38,7 +38,7 @@ Alles, was ein Werkzeug nicht sicher deuten kann: Routing-Module mit eigener Log
 
 ## Der Workspace `legacy-ngmodule`
 
-`output/project/workspaces/legacy-ngmodule/` ist eine kleine EventHub-App im Stil Angular 15, technisch auf Angular 22:
+`project/workspaces/legacy-ngmodule/` ist eine kleine EventHub-App im Stil Angular 15, technisch auf Angular 22:
 
 ```text
 src/
@@ -101,7 +101,7 @@ Mit `--path=src/app/sessions` lässt sich Schritt 1 auf einen Ordner begrenzen: 
 
 ## Was danach von Hand bleibt
 
-Ergebnis von Schritt 3 im Workspace (gekürzt):
+Typisches Ergebnis von Schritt 3 in einer App mit `AppModule` und `AppRoutingModule` (gekürzt; Beispiel: Shop-App mit Feature `orders`):
 
 ```ts
 bootstrapApplication(AppComponent, {
@@ -117,7 +117,7 @@ bootstrapApplication(AppComponent, {
 | --- | --- | --- |
 | `importProvidersFrom(BrowserModule, HttpClientModule, AppRoutingModule)` | das Schematic übernimmt Modul-Imports 1:1 | `provideRouter(routes)`, `provideHttpClient()`; `BrowserModule` entfällt |
 | `app-routing.module.ts` | Routing-Module können Logik enthalten | `app.routes.ts` mit `Routes`-Array |
-| `sessions.module.ts` + `sessions-routing.module.ts` | Modul mit `RouterModule.forChild` ist nicht leer | `sessions.routes.ts`, `loadChildren: () => import('./sessions/sessions.routes')` |
+| Feature-Modul mit Routing, z. B. `orders.module.ts` + `orders-routing.module.ts` | Modul mit `RouterModule.forChild` ist nicht leer | `orders.routes.ts`, `loadChildren: () => import('./orders/orders.routes')` |
 | Providers in `main.ts` | Schematic kennt keine Dateikonvention | `app.config.ts` |
 | ungenutzter Import `platformBrowser`, alter Kommentar in `main.ts` | Schematic räumt TypeScript-Imports nicht auf | von Hand oder im Editor „Organize Imports“ |
 

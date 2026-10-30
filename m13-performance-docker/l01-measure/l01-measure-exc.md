@@ -5,9 +5,9 @@
 
 ## Vorbereitung
 
-- Terminal 1 im Ordner `output/project/`: `npm run api` (Mock-API, Port 3000).
-- Terminal 2 im Ordner `output/project/workspaces/eventhub-perf/`: `npm install` (einmalig, ca. 1 Minute).
-- Arbeitsordner: `output/project/workspaces/eventhub-perf/` (kleine EventHub-App: Startseite mit Hero-Bild, Programm, Auslastungsdiagramm; Detailseite `/sessions/:id`).
+- Terminal 1 im Ordner `project/`: `npm run api` (Mock-API, Port 3000).
+- Terminal 2 im Ordner `project/workspaces/eventhub-perf/`: `npm install` (einmalig, ca. 1 Minute).
+- Arbeitsordner: `project/workspaces/eventhub-perf/` (kleine EventHub-App: Startseite mit Hero-Bild, Programm, Auslastungsdiagramm; Detailseite `/sessions/:id`).
 - Chrome mit Angular DevTools; Lighthouse ist in den Chrome DevTools eingebaut.
 - Das Hero-Bild `public/img/hero.png` erzeugt das Skript `scripts/generate-hero.mjs` beim ersten `npm start` oder `npm run build` lokal.
 

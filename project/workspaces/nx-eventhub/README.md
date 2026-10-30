@@ -16,7 +16,7 @@ Danach: Willkommensseite entfernt, Session-Liste und -Karte ergänzt, Modulgrenz
 ## Start
 
 ```bash
-# Mock-API im Kursprojekt (output/project/)
+# Mock-API im Kursprojekt (project/)
 npm run api
 
 # in diesem Ordner

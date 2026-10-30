@@ -117,7 +117,7 @@ sequenceDiagram
 
 | Beobachtung | Bedeutung |
 | --- | --- |
-| Chunk erscheint ca. 2 s nach dem Laden, ohne Klick | vorgeladen |
+| Chunk erscheint ohne Klick, nach der Verzögerung der Strategie (oben 5 s) | vorgeladen |
 | Klick auf den Link erzeugt keinen neuen Request | Chunk war schon da |
 | Chunk erscheint erst beim Klick | nicht vorgeladen |
 
@@ -138,7 +138,7 @@ Ausblick: Strategien, die nur Routen vorladen, deren Links gerade sichtbar sind 
 
 | Symptom | Ursache | Lösung |
 | --- | --- | --- |
-| Nichts wird vorgeladen | `withPreloading` fehlt oder steht nicht in `provideRouter` der Root-Konfiguration | `withPreloading(DelayedPreloading)` als Argument von `provideRouter` |
+| Nichts wird vorgeladen | `withPreloading` fehlt oder steht nicht in `provideRouter` der Root-Konfiguration | die eigene Strategie-Klasse (oben `WarmupPreloading`, in der Übung `DelayedPreloading`) als `withPreloading(…)`-Argument von `provideRouter` |
 | Auch Admin wird vorgeladen | `PreloadAllModules` statt eigener Strategie aktiv | Strategie-Klasse in `withPreloading` prüfen |
 | TS-Fehler „Property 'preload' comes from an index signature“ | Punkt-Schreibweise `route.data?.preload` | `route.data?.['preload']` |
 | Konsole zeigt die Logs, Network-Tab nichts | Chunk war schon im Cache des Dev-Servers bzw. Filter falsch | Filter `JS`, „Disable cache“ aktivieren, neu laden |

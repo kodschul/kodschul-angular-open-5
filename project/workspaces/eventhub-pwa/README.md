@@ -5,7 +5,7 @@ Kleine Angular-22-App mit dem Konferenzprogramm aus der Mock-API (`http://localh
 ## Start
 
 ```bash
-# Mock-API im Kursprojekt (output/project/)
+# Mock-API im Kursprojekt (project/)
 npm run api
 
 # in diesem Ordner

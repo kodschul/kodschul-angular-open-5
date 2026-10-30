@@ -5,8 +5,8 @@
 
 ## Vorbereitung
 
-- Terminal 1 im Ordner `output/project/`: `npm run api`.
-- Terminal 2 im Ordner `output/project/`: `npm start`.
+- Terminal 1 im Ordner `project/`: `npm run api`.
+- Terminal 2 im Ordner `project/`: `npm start`.
 - Arbeitsdatei: `src/app/playground/playground.ts`
 - Starter: `src/app/starters/m03-l03-directives.ts` (enthält die fertige Hilfsfunktion `createBubble` für die Tooltip-Blase)
 - Browser: http://localhost:4200/playground
@@ -23,7 +23,7 @@
 
 ### Teil b: Komposition
 
-6. Erstelle an der Stelle `TODO Aufgabe 6` eine Komponente `SessionBadge` (Selektor `app-session-badge`) mit `@Input() level: SessionLevel` und dem Template `{{ level }}`. Übertrage die Klassen des alten `<span class="badge" …>` in die `host`-Metadaten (`class: 'badge'` plus drei `[class.badge-…]`-Bindungen).
+6. Erstelle an der Stelle `TODO Aufgabe 6` eine Komponente `SessionBadge` (Selektor `app-session-badge`) mit `@Input() level: SessionLevel = 'Einsteiger'` und dem Template `{{ level }}`; den Typ `SessionLevel` aus `../shared/models` importieren. Übertrage die Klassen des alten `<span class="badge" …>` in die `host`-Metadaten (`class: 'badge'` plus drei `[class.badge-…]`-Bindungen).
 7. Ergänze `hostDirectives`: `Highlight` mit Eingabe freigegeben als `color`, `Tooltip` mit Eingabe freigegeben als `tooltip`.
 8. Ersetze in der Liste das alte `<span class="badge" …>` durch `<app-session-badge [level]="session.level" color="#ffe08a" [tooltip]="session.track + ' · ' + session.room" />` und nimm `SessionBadge` in `imports` auf.
 9. Prüfe: Hover über ein Badge färbt es gelb und zeigt Track und Raum. Entferne testweise erst `inputs: ['appTooltip: tooltip']`, dann `inputs: ['appHighlight: color']`, und notiere jeweils die Reaktion von Compiler und Browser; stelle beide Zeilen wieder her.

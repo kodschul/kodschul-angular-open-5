@@ -26,7 +26,7 @@ import { filter } from 'rxjs';
       </section>
       <button class="btn" type="button" (click)="logout()">Logout bei Keycloak</button>
     } @else {
-      <p class="muted">Nicht angemeldet. Login leitet zu Keycloak weiter (Port 8080) und kommt hierher zurück.</p>
+      <p class="muted">Nicht angemeldet. Login leitet zu Keycloak weiter und kommt hierher zurück.</p>
       <button class="btn btn-primary" type="button" (click)="login()">Login mit Keycloak</button>
     }
   `,
@@ -41,7 +41,7 @@ export class OidcPage {
     inject(PublicEventsService)
       .registerForEvents()
       .pipe(filter((event) => event.type === EventTypes.ConfigLoadingFailed), takeUntilDestroyed())
-      .subscribe(() => this.error.set('Keycloak nicht erreichbar (http://localhost:8080). Läuft docker compose up?'));
+      .subscribe(() => this.error.set('Keycloak nicht erreichbar: authority in oidc.config.ts prüfen (lokal: läuft docker compose up?).'));
 
     // Nach dem Rücksprung steht ?code=…&state=… in der URL: checkAuth tauscht den Code gegen Tokens.
     // Ohne Code prüft checkAuth, ob gültige Tokens im sessionStorage liegen.
@@ -52,7 +52,7 @@ export class OidcPage {
         }
       },
       // z. B. Keycloak gestoppt: .well-known/openid-configuration nicht ladbar
-      error: () => this.error.set('Keycloak nicht erreichbar (http://localhost:8080). Läuft docker compose up?'),
+      error: () => this.error.set('Keycloak nicht erreichbar: authority in oidc.config.ts prüfen (lokal: läuft docker compose up?).'),
     });
   }
 

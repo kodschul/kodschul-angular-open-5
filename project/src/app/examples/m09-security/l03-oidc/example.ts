@@ -9,7 +9,7 @@ import { Component } from '@angular/core';
     <section class="card">
       <p>Das lauffähige Beispiel startet im Workspace <code>workspaces/eventhub-lab</code> (Port 4201).</p>
       <ol>
-        <li>Keycloak starten: <code>cd workspaces/keycloak</code>, dann <code>docker compose up</code></li>
+        <li>Keycloak bereitstellen: lokal <code>cd workspaces/keycloak</code>, dann <code>docker compose up</code>; bei einer bereitgestellten Instanz deren Adresse in <code>oidc.config.ts</code> (<code>authority</code>) eintragen</li>
         <li>Beispielstand kopieren: <code>src/app/examples/m09-security/l03-oidc/eventhub/</code> und <code>app.config.ts</code>, <code>oidc.config.ts</code> nach <code>workspaces/eventhub-lab/src/app/</code></li>
         <li>Lab-App starten: <code>cd workspaces/eventhub-lab</code>, dann <code>npx ng serve</code></li>
         <li><code>http://localhost:4201/oidc</code> öffnen, mit <code>alice</code> / <code>alice123</code> oder <code>bob</code> / <code>bob123</code> anmelden</li>

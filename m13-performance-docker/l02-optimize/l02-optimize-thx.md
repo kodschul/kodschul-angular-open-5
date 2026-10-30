@@ -44,17 +44,22 @@ Selten. Ohne Vorher-Wert lässt sich weder der Nutzen belegen noch ein Rückschr
 `NgOptimizedImage` ist eine Direktive aus `@angular/common`. Sie ersetzt `src` durch `ngSrc` und erzwingt Angaben, die Browser für schnelles, stabiles Laden brauchen.
 
 ```ts
+// Beispiel: Detailseite einer Session mit Banner (LCP-Bild) und Speaker-Porträt
 import { NgOptimizedImage } from '@angular/common';
 
 @Component({
   imports: [NgOptimizedImage],
   template: `
-    <img ngSrc="img/hero.png" width="1400" height="700" priority
-         alt="Bühne der EventHub-Konferenz mit drei Scheinwerfern" class="hero" />
+    <img ngSrc="img/rooms/saal-a.webp" width="1200" height="400" priority
+         alt="Saal A von der Bühne aus gesehen" class="banner" />
+    <img ngSrc="img/speakers/anna-berger.webp" width="160" height="160"
+         alt="Porträt von Anna Berger" />
   `,
-  styles: `.hero { width: 100%; height: auto; }`,
+  styles: `.banner { width: 100%; height: auto; }`,
 })
 ```
+
+`width` und `height` geben die echten Abmessungen der Datei an (Seitenverhältnis); die dargestellte Größe regelt CSS. Das Banner ist das LCP-Element und bekommt `priority`, das Porträt weiter unten lädt lazy.
 
 | Attribut | Wirkung |
 | --- | --- |
@@ -70,56 +75,63 @@ Im Entwicklungsmodus warnt Angular bei typischen Fehlern, etwa `NG0913` (Datei v
 ## Schwere Komponente verzögern
 
 ```html
+<!-- Beispiel: Lageplan mit einer großen Kartenbibliothek am Ende der Seite -->
 @defer (on viewport; prefetch on idle) {
-  <app-booking-chart />
+  <app-venue-map />
 } @placeholder {
-  <div class="card"><div class="chart-placeholder">Diagramm wird beim Scrollen geladen …</div></div>
+  <div class="map-box">Lageplan wird beim Scrollen geladen …</div>
 } @loading (minimum 200ms) {
-  <div class="card"><div class="chart-placeholder loading">Diagramm wird geladen …</div></div>
+  <div class="map-box loading">Lageplan wird geladen …</div>
 }
+<!-- styles: .map-box { height: 400px; }  gleiche Höhe wie die Karte -->
 ```
 
 - `on viewport` lädt den Chunk, wenn der Platzhalter sichtbar wird; `prefetch on idle` holt ihn vorher, sobald der Browser nichts zu tun hat.
-- Komponente und alles, was nur sie importiert (hier `chart.js`), wandern in einen eigenen Lazy-Chunk.
-- Platzhalter und Ladezustand haben dieselbe Höhe wie das Diagramm; sonst entsteht ein neuer Layout-Sprung.
+- Komponente und alles, was nur sie importiert (hier die Kartenbibliothek), wandern in einen eigenen Lazy-Chunk. Wird die Komponente zusätzlich an anderer Stelle direkt verwendet, bleibt der Code im Start-Bundle.
+- Platzhalter und Ladezustand haben dieselbe Höhe wie die Komponente; sonst entsteht ein neuer Layout-Sprung.
 
 ## Teure Berechnung aus dem Template holen
 
-Vorher ruft das Template `relevance(session)` dreimal pro Karte und bei jedem Durchlauf auf. Nachher berechnet ein `computed()` den Score einmal pro Datenstand; das Template liest nur noch Werte.
-
-```ts
-private readonly scored = computed(() => {
-  const list = this.sessions.hasValue() ? this.sessions.value() : [];
-  return list.map((session) => ({ session, score: relevance(session) }));
-});
-
-readonly filtered = computed(() => {
-  const term = this.query().toLowerCase();
-  return this.scored().filter((item) => item.session.title.toLowerCase().includes(term));
-});
-```
+Eine Methode im Template läuft bei jedem Change-Detection-Durchlauf für jede Zeile erneut. Ein `computed()` berechnet den Wert einmal pro Datenstand; das Template liest nur noch fertige Werte. Beispiel: geschätzte Lesezeit der Abstracts in einer Vortragsliste.
 
 ```html
-@for (item of filtered(); track item.session.id) {
-  <article class="card" [class.score-high]="item.score > 50">…</article>
+<!-- vorher: readingTime() läuft pro Zeile und pro Durchlauf, track nach Objekt -->
+@for (talk of talks(); track talk) {
+  <li>{{ talk.title }} · {{ readingTime(talk.abstract) }} min</li>
 }
 ```
 
-- `computed()` rechnet nur neu, wenn sich `sessions` ändert, nicht bei jedem Tick der Uhr und nicht bei jeder Eingabe.
-- `track item.session.id` erkennt Karten nach dem Neuladen wieder; Angular aktualisiert nur geänderte Bindungen statt 12 Karten neu zu bauen.
-- Alternative ohne Signals: eine reine Pipe (`pure: true`, Default) mit dem Score; sie läuft nur, wenn sich ihr Eingabewert ändert.
+```ts
+// nachher: einmal pro Datenstand; readingTime() ist eine Funktion außerhalb der Klasse
+private readonly rows = computed(() =>
+  this.talks().map((talk) => ({ talk, minutes: readingTime(talk.abstract) })),
+);
+readonly shortRows = computed(() => this.rows().filter((row) => row.minutes <= this.maxMinutes()));
+```
+
+```html
+@for (row of shortRows(); track row.talk.id) {
+  <li>{{ row.talk.title }} · {{ row.minutes }} min</li>
+}
+```
+
+- `rows` rechnet nur neu, wenn sich `talks` ändert; ein Wechsel von `maxMinutes` filtert nur noch, ohne die Lesezeiten neu zu berechnen.
+- `track row.talk.id` erkennt Zeilen nach dem Neuladen wieder; Angular aktualisiert nur geänderte Bindungen, statt alle Zeilen neu zu bauen. `track talk` (nach Objekt) baut nach jedem Neuladen alles neu, weil die API neue Objekte liefert; im Entwicklungsmodus warnt Angular dann mit `NG0956`.
+- Alternative ohne Signals: eine reine Pipe (`pure: true`, Default) mit dem Wert; sie läuft nur, wenn sich ihr Eingabewert ändert.
 
 ## Budgets als Leitplanke
 
-Budgets knapp über den gemessenen Werten setzen. Warnung = Hinweis im Build, Fehler = Build bricht ab.
+Budgets knapp über den gemessenen Werten setzen. Warnung = Hinweis im Build, Fehler = Build bricht ab. Beispiel für eine App, die nach der Optimierung 410 kB Initial total hat:
 
 ```json
 "budgets": [
-  { "type": "initial", "maximumWarning": "350kB", "maximumError": "500kB" },
-  { "type": "anyScript", "maximumWarning": "250kB", "maximumError": "400kB" },
-  { "type": "anyComponentStyle", "maximumWarning": "2kB", "maximumError": "4kB" }
+  { "type": "initial", "maximumWarning": "450kB", "maximumError": "600kB" },
+  { "type": "anyScript", "maximumWarning": "300kB", "maximumError": "450kB" },
+  { "type": "anyComponentStyle", "maximumWarning": "3kB", "maximumError": "6kB" }
 ]
 ```
+
+Ein neues Angular-22-Projekt startet mit `initial` 500 kB / 1 MB und `anyComponentStyle` 4 kB / 8 kB.
 
 Budgets messen die Rohgröße (Raw size), nicht die übertragene, komprimierte Größe.
 

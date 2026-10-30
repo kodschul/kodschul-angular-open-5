@@ -1,6 +1,6 @@
 # Lab 11.3 – Lösung: Angular Elements
 
-Workspace: `output/project/workspaces/eventhub-elements/` (Ausgangszustand mit `registered`; die Änderungen aus Aufgabe 4–5 stehen unten). Infoseite in der Kurs-App: `/examples/m11-libraries/l03-elements`.
+Workspace: `project/workspaces/eventhub-elements/` (Ausgangszustand mit `registered`; die Änderungen aus Aufgabe 4–5 stehen unten). Infoseite in der Kurs-App: `/examples/m11-libraries/l03-elements`.
 
 ## Aufgabe 1: Build
 

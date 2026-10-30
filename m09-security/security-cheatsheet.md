@@ -64,7 +64,8 @@ Schnellreferenz für Modul 9 (Tokens, JWT im Client, OIDC). Arbeitsort der Labs 
 | --- | --- |
 | `cd workspaces/keycloak && docker compose up` | Keycloak 26.x mit Realm `eventhub` auf Port 8080 |
 | `docker compose down` | stoppen, Daten verwerfen |
-| `http://localhost:8080/realms/eventhub/.well-known/openid-configuration` | Endpunkte des Realms |
+| `http://localhost:8080/realms/eventhub/.well-known/openid-configuration` | Endpunkte des Realms (lokal) |
+| `<Basis-Adresse>/realms/eventhub` | Issuer-URL bei einer bereitgestellten Keycloak-Instanz; Wert für `authority` |
 | Konten | `alice` / `alice123` (admin, user), `bob` / `bob123` (user) |
 | `provideAuth({ config: oidcConfig })` | Bibliothek konfigurieren, nur in der Root-Konfiguration |
 | `authority`, `clientId`, `responseType: 'code'`, `scope`, `redirectUrl` | Pflichtangaben der Konfiguration |

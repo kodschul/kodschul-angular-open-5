@@ -1,12 +1,34 @@
-# Mastering Angular: Kurs-Repo
+<div align="center">
 
-Handouts und lauffähiger Code zum Aufbaukurs „Mastering Angular: Advanced Skills for Professional Development“ (4 Tage, auf 5 Tage dehnbar). Alle Beispiele spielen in der fiktiven Konferenz-Plattform **EventHub**; jedes Thema beginnt bei der klassischen Lösung aus Bestandsprojekten und führt dann den heutigen Weg ein.
+<img src="assets/kodschul-logo.png" alt="Kodschul" width="220" />
 
-Stand: Angular 22.2, TypeScript 6, RxJS 7.8, NgRx 22, Vitest 5, Cypress 16 (28.10.2026).
+# Mastering Angular: Advanced Skills for Professional Development
+
+**4-Tage-Workshop** (auf 5 Tage dehnbar) · Programmierung · Deutsch
+
+</div>
+
+---
+
+Teilnehmerunterlagen des Kurses **„Mastering Angular: Advanced Skills for Professional Development“**. Alle Beispiele spielen in der fiktiven Konferenz-Plattform **EventHub**; jedes Thema beginnt bei der klassischen Lösung aus Bestandsprojekten und führt dann den heutigen Weg mit Angular 22 ein.
+
+Jedes Lab besteht aus drei Dateien: Theorie (`-thx.md`), Übung (`-exc.md`) und Lösung (`-sol.md`); jedes Modul hat einen Spickzettel. Alle Pfade in dieser Datei sind relativ zu diesem Ordner. Alle Befehle sind Bash-Befehle (Windows: Git Bash).
+
+## Auf einen Blick
+
+| | |
+| --- | --- |
+| **Dauer** | 4 Tage (5-Tage-Variante mit Transferprojekt) |
+| **Zielgruppe** | Angular-Entwickler:innen mit Projekterfahrung |
+| **Niveau** | fortgeschritten |
+| **Sprache** | Deutsch |
+| **Projekt** | EventHub (Angular 22.2, TypeScript 6, RxJS 7.8, NgRx 22, Vitest, Cypress 16; Stand 28.10.2026) |
+
+Details zu Zielen, Voraussetzungen und Tagesablauf: [`m00-overview/overview.md`](m00-overview/overview.md).
 
 ## Setup in 3 Befehlen
 
-Voraussetzung: Node.js 22.22.3+ oder 24.15+. Details, Fallbacks und häufige Probleme: [`00-setup-and-installation.md`](00-setup-and-installation.md).
+Voraussetzung: Node.js 22.22.3+ oder 24.15+. Details, Vorab-Downloads und Fallbacks: [`00-setup-and-installation.md`](00-setup-and-installation.md).
 
 ```bash
 cd project
@@ -14,6 +36,55 @@ npm install
 npm run api   # Terminal 1: Mock-API auf Port 3000
 npm start     # Terminal 2: App auf http://localhost:4200/
 ```
+
+## Einstieg
+
+| Datei | Inhalt |
+| --- | --- |
+| [`00-setup-and-installation.md`](00-setup-and-installation.md) | Rechner prüfen, Projekt starten, Mock-API, Vorab-Downloads, Fallbacks |
+| [`00-prework.md`](00-prework.md) | Optionale Auffrischung der Angular-Grundlagen |
+| [`m00-overview/overview.md`](m00-overview/overview.md) | Ziel, Zielgruppe, Szenario, Tagesablauf, Arbeitsweise |
+| [`m00-overview/topics.md`](m00-overview/topics.md) | Module und Kernthemen |
+| [`m00-overview/glossary.md`](m00-overview/glossary.md) | Begriffe mit Fundstelle |
+| [`m00-overview/best-practices.md`](m00-overview/best-practices.md) | Regeln aus allen Modulen |
+| [`m00-overview/faq.md`](m00-overview/faq.md) | Häufige Fragen und Probleme |
+| [`project/README.md`](project/README.md) | Kurs-App EventHub: Start, Befehle, Tabelle Lab → Beispiel → Starter, Workspaces |
+
+## Tag 1: Fundament auf heutigem Stand
+
+| Modul | Ordner | Spickzettel | Labs |
+| --- | --- | --- | --- |
+| 1 Recap Angular-Grundlagen | [`m01-angular-recap/`](m01-angular-recap/) | [`angular-recap-cheatsheet.md`](m01-angular-recap/angular-recap-cheatsheet.md) | `l01-workspace`, `l02-recap` |
+| 2 Standalone-Komponenten | [`m02-standalone/`](m02-standalone/) | [`standalone-cheatsheet.md`](m02-standalone/standalone-cheatsheet.md) | `l01-standalone`, `l02-bootstrapping`, `l03-migration` |
+| 3 Komponenten Deep Dive | [`m03-component-deep-dive/`](m03-component-deep-dive/) | [`component-deep-dive-cheatsheet.md`](m03-component-deep-dive/component-deep-dive-cheatsheet.md) | `l01-control-flow`, `l02-defer`, `l03-directives` |
+| 4 Reactive Forms Deep Dive | [`m04-reactive-forms/`](m04-reactive-forms/) | [`reactive-forms-cheatsheet.md`](m04-reactive-forms/reactive-forms-cheatsheet.md) | `l01-typed-forms`, `l02-validators`, `l03-custom-control` |
+
+## Tag 2: Reaktivität: RxJS, Signals und State Management
+
+| Modul | Ordner | Spickzettel | Labs |
+| --- | --- | --- | --- |
+| 5 Reaktive Programmierung mit RxJS | [`m05-rxjs/`](m05-rxjs/) | [`rxjs-cheatsheet.md`](m05-rxjs/rxjs-cheatsheet.md) | `l01-marbles`, `l02-operators`, `l03-debugging` |
+| 6 Reaktivität mit Signals | [`m06-signals/`](m06-signals/) | [`signals-cheatsheet.md`](m06-signals/signals-cheatsheet.md) | `l01-signals`, `l02-interop`, `l03-communication`, `l04-signal-forms` |
+| 7 State Management mit NgRx | [`m07-ngrx/`](m07-ngrx/) | [`ngrx-cheatsheet.md`](m07-ngrx/ngrx-cheatsheet.md) | `l01-state-decision`, `l02-store`, `l03-effects`, `l04-signal-store`, `l05-events` |
+
+## Tag 3: Routing, Sicherheit und Testing
+
+| Modul | Ordner | Spickzettel | Labs |
+| --- | --- | --- | --- |
+| 8 Fortgeschrittenes Routing | [`m08-advanced-routing/`](m08-advanced-routing/) | [`advanced-routing-cheatsheet.md`](m08-advanced-routing/advanced-routing-cheatsheet.md) | `l01-lazy-loading`, `l02-preloading`, `l03-dynamic-components` |
+| 9 Absicherung von Angular-Anwendungen | [`m09-security/`](m09-security/) | [`security-cheatsheet.md`](m09-security/security-cheatsheet.md) | `l01-tokens`, `l02-jwt`, `l03-oidc` |
+| 10 Fortgeschrittenes Testing | [`m10-testing/`](m10-testing/) | [`testing-cheatsheet.md`](m10-testing/testing-cheatsheet.md) | `l01-strategy`, `l02-component-tests`, `l03-marble-testing`, `l04-store-tests`, `l05-cypress` |
+
+## Tag 4: Architektur, Wiederverwendung und Auslieferung
+
+| Modul | Ordner | Spickzettel | Labs |
+| --- | --- | --- | --- |
+| 11 Wiederverwendbarkeit mit Libraries und Angular Elements | [`m11-libraries/`](m11-libraries/) | [`libraries-cheatsheet.md`](m11-libraries/libraries-cheatsheet.md) | `l01-nx`, `l02-library`, `l03-elements` |
+| 12 Micro-Frontends und Progressive Web Apps | [`m12-microfrontends-pwa/`](m12-microfrontends-pwa/) | [`microfrontends-pwa-cheatsheet.md`](m12-microfrontends-pwa/microfrontends-pwa-cheatsheet.md) | `l01-mfe-architecture`, `l02-native-federation`, `l03-pwa` |
+| 13 Performance und Containerisierung | [`m13-performance-docker/`](m13-performance-docker/) | [`performance-docker-cheatsheet.md`](m13-performance-docker/performance-docker-cheatsheet.md) | `l01-measure`, `l02-optimize`, `l03-docker` |
+| 14 Continuous Integration und Transfer | [`m14-ci-transfer/`](m14-ci-transfer/) | [`ci-transfer-cheatsheet.md`](m14-ci-transfer/ci-transfer-cheatsheet.md) | `l01-ci`, `l02-architecture-review` |
+
+Transferprojekt „EventHub Release“ (5-Tage-Variante): [`m14-ci-transfer/m14-exc.md`](m14-ci-transfer/m14-exc.md), Lösung [`m14-sol.md`](m14-ci-transfer/m14-sol.md).
 
 ## Arbeiten mit dem Repo
 
@@ -23,12 +94,7 @@ npm start     # Terminal 2: App auf http://localhost:4200/
 | Starter der Übungen | [`project/src/app/starters/`](project/src/app/starters/); das `-exc.md` nennt Datei und ggf. gleichnamigen Ordner |
 | Fertige Beispiele (Lösungen) | [`project/src/app/examples/`](project/src/app/examples/), Anzeige unter `/examples/<modul>/<lab>` |
 | Mock-API | [`project/api/`](project/api/server.mjs), Endpunkte und Schalter in [`00-setup-and-installation.md`](00-setup-and-installation.md#mock-api-endpunkte-und-schalter) |
-| Eigene Projekte (Migration, Nx, Libraries, Micro-Frontends, PWA, Performance, Docker, CI) | [`project/workspaces/`](project/README.md#workspaces) |
-| Optionale Auffrischung der Grundlagen | [`00-prework.md`](00-prework.md) |
-| Überblick, Themen, Glossar, Best Practices, FAQ | [`m00-overview/`](m00-overview/overview.md) |
-| Transferprojekt „EventHub Release“ (5-Tage-Variante) | [`m14-exc.md`](m14-ci-transfer/m14-exc.md), Lösung [`m14-sol.md`](m14-ci-transfer/m14-sol.md) |
-
-Pro Lab: **Theorie** (`-thx.md`) mit Leitfragen, **Übung** (`-exc.md`) mit Starter und Checkpoints, **Lösung** (`-sol.md`) mit Verweis auf das Beispiel. Pro Modul ein Cheatsheet.
+| Eigene Projekte (Migration, Nx, Libraries, Micro-Frontends, PWA, Performance, Docker, CI, Keycloak) | [`project/workspaces/`](project/README.md#workspaces) |
 
 ## Karte: Modul → Handout → Beispiel
 
@@ -174,3 +240,11 @@ Cheatsheet: [`ci-transfer-cheatsheet.md`](m14-ci-transfer/ci-transfer-cheatsheet
 | --- | --- | --- | --- | --- |
 | 14.1 CI-Pipeline für Angular | [thx](m14-ci-transfer/l01-ci/l01-ci-thx.md) | [exc](m14-ci-transfer/l01-ci/l01-ci-exc.md) | [sol](m14-ci-transfer/l01-ci/l01-ci-sol.md) | `/examples/m14-ci-transfer/l01-ci` (Infoseite) |
 | 14.2 Architektur-Review: Bestands-App modernisieren | [thx](m14-ci-transfer/l02-architecture-review/l02-architecture-review-thx.md) | [exc](m14-ci-transfer/l02-architecture-review/l02-architecture-review-exc.md) | [sol](m14-ci-transfer/l02-architecture-review/l02-architecture-review-sol.md) | `/examples/m14-ci-transfer/l02-architecture-review` (Infoseite) |
+
+---
+
+<div align="center">
+
+<sub>© Nextise GmbH · <a href="https://www.kodschul.com">kodschul.com</a> · Kompetenz aufbauen – von der sicheren KI-Anwendung bis zur modernen IT-Basis</sub>
+
+</div>

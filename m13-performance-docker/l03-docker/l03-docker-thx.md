@@ -56,16 +56,16 @@ flowchart LR
   S2 --> H["Image eventhub-web"]
 ```
 
-Dateien im Ordner `output/project/workspaces/`:
+Dateien im Ordner `project/workspaces/`:
 
 ```text
 workspaces/
 ├── eventhub-perf-fixed/              App aus Lab 13.2 (wird gebaut)
 └── docker/
-    ├── Dockerfile                    Multi-Stage-Build
+    ├── Dockerfile                    fertiger Multi-Stage-Build (Referenz)
     ├── Dockerfile.dockerignore       Ignore-Datei für genau dieses Dockerfile
     ├── Dockerfile.unprivileged       Variante ohne root
-    ├── nginx/default.conf            SPA-Fallback und Caching
+    ├── nginx/default.conf            fertige nginx-Konfiguration (Referenz)
     ├── runtime/config.template.json  Vorlage mit ${API_URL}
     ├── runtime/40-eventhub-config.sh schreibt config.json beim Start
     └── starter/                      Starter für die Übung
@@ -73,88 +73,117 @@ workspaces/
 
 ## Dockerfile
 
+Beispiel: ein eigenständiges Angular-Projekt `kursplan`, bei dem Dockerfile, `nginx.conf` und `.dockerignore` direkt im Projektordner liegen (Build-Kontext = Projektordner).
+
 ```dockerfile
 # syntax=docker/dockerfile:1
+# Bauen im Projektordner: docker build -t kursplan-web .
+
+# ---------- Stufe 1: Build mit Node ----------
 FROM node:24-alpine AS build
-ARG APP_DIR=eventhub-perf-fixed
 WORKDIR /app
 # erst Paketdateien: Schicht bleibt im Cache, solange die Abhängigkeiten gleich sind
-COPY ${APP_DIR}/package.json ${APP_DIR}/package-lock.json ./
+COPY package.json package-lock.json ./
 RUN npm ci
-COPY ${APP_DIR}/ ./
+COPY . .
 RUN npm run build                      # Produktions-Build inkl. Budgets
 
+# ---------- Stufe 2: Auslieferung mit nginx ----------
 FROM nginx:alpine AS runtime
-COPY docker/nginx/default.conf /etc/nginx/conf.d/default.conf
-COPY docker/runtime/config.template.json /etc/eventhub/config.template.json
-COPY --chmod=755 docker/runtime/40-eventhub-config.sh /docker-entrypoint.d/40-eventhub-config.sh
-COPY --from=build /app/dist/eventhub-perf/browser /usr/share/nginx/html
-ENV API_URL=http://localhost:3000
+COPY nginx.conf /etc/nginx/conf.d/default.conf
+COPY --from=build /app/dist/kursplan/browser /usr/share/nginx/html
 EXPOSE 8080
 ```
 
 | Anweisung | Wirkung |
 | --- | --- |
 | `FROM … AS build` | Stufe mit Namen; spätere Stufen holen Dateien per `COPY --from=build` |
-| `ARG APP_DIR` | Build-Parameter; `--build-arg APP_DIR=eventhub-perf` baut die langsame Variante |
-| `COPY package*.json` vor `COPY .` | Abhängigkeiten nur neu installieren, wenn sich die Paketdateien ändern |
+| `WORKDIR /app` | Arbeitsordner im Image; relative Pfade in `COPY` und `RUN` beziehen sich darauf |
+| `COPY package*.json` vor `COPY . .` | Abhängigkeiten nur neu installieren, wenn sich die Paketdateien ändern |
 | `npm ci` | installiert exakt nach `package-lock.json` |
-| `COPY --chmod=755` | setzt die Ausführungsrechte des Startskripts beim Kopieren |
+| `COPY --from=build <pfad> <ziel>` | nur das Build-Ergebnis übernehmen; `dist/<projektname>/browser` ist der Ausgabeordner von `ng build` |
+| `ARG APP_DIR=…` | Build-Parameter mit Standardwert, nutzbar als `${APP_DIR}`; `--build-arg APP_DIR=…` setzt ihn beim Bauen |
+| `COPY --chmod=755` | setzt die Ausführungsrechte einer Datei beim Kopieren |
 | `EXPOSE 8080` | dokumentiert den Port; veröffentlicht wird er erst mit `docker run -p` |
 
-Der Build-Kontext ist `workspaces/`, damit App und Docker-Dateien erreichbar sind. Docker (BuildKit) liest `Dockerfile.dockerignore` neben dem Dockerfile statt einer `.dockerignore` im Kontext.
+### Build-Kontext im Kurs-Workspace
+
+Im Kurs liegen App und Docker-Dateien in getrennten Ordnern. Der Build-Kontext ist deshalb `workspaces/`, und alle Pfade im Dockerfile beginnen mit dem Ordnernamen: `${APP_DIR}/…` für die App (Standard `eventhub-perf-fixed`), `docker/…` für nginx-Konfiguration und Laufzeitdateien. Der Starter `docker/starter/Dockerfile` gibt `ARG APP_DIR` und die Zeilen für die Laufzeitkonfiguration schon vor.
+
+Eine `.dockerignore` hält Dateien aus dem Build-Kontext heraus. Für das Beispiel `kursplan` liegt sie im Projektordner:
 
 ```gitignore
-*
-!eventhub-perf/
-!eventhub-perf-fixed/
-!docker/
-**/node_modules
-**/dist
-**/.angular
-**/public/img/hero.png
+node_modules
+dist
+.angular
+.git
 ```
+
+| Muster | Wirkung |
+| --- | --- |
+| `node_modules` | Eintrag im Wurzelordner des Kontexts ausschließen |
+| `**/node_modules` | in allen Unterordnern ausschließen |
+| `*` | alles ausschließen … |
+| `!ordner/` | … außer diesem Ordner (Ausnahme, Reihenfolge zählt: spätere Zeilen gewinnen) |
+
+Liegt das Dockerfile nicht im Wurzelordner des Kontexts, liest Docker (BuildKit) eine Datei `<Dockerfile-Name>.dockerignore` direkt neben dem Dockerfile, z. B. `docker/playground/Dockerfile.dockerignore`, statt einer `.dockerignore` im Kontext.
 
 ## nginx: SPA-Fallback und Caching
 
+Beispiel `nginx.conf` für `kursplan`: Grundgerüst, Komprimierung, eine Cache-Regel für Bilder und der SPA-Fallback.
+
 ```nginx
 server {
-    listen 8080;
-    root /usr/share/nginx/html;
+    listen 8080;                                   # Port im Container
+    root /usr/share/nginx/html;                    # hierhin kopiert das Dockerfile den Build
     index index.html;
 
     gzip on;
     gzip_types text/css application/javascript application/json image/svg+xml;
 
-    location ~* "-[0-9a-z]{8}\.(js|css)$" {          # main-AB12CD34.js: Hash im Namen
-        try_files $uri =404;
-        add_header Cache-Control "public, max-age=31536000, immutable";
+    location ~* \.(png|jpg|jpeg|webp|avif|svg|ico|woff2?)$ {   # Regex, ~* = ohne Groß-/Kleinschreibung
+        try_files $uri =404;                       # fehlende Datei: 404, nie index.html
+        add_header Cache-Control "public, max-age=86400";       # 1 Tag
     }
-    location ~* \.(png|jpg|jpeg|webp|avif|svg|ico|woff2?)$ {
-        try_files $uri =404;
-        add_header Cache-Control "public, max-age=86400";
+    location = /robots.txt {                       # = : genau dieser Pfad
+        add_header Cache-Control "no-cache";
     }
-    location = /config.json { add_header Cache-Control "no-store"; }
-    location = /index.html  { add_header Cache-Control "no-cache"; }
-
-    location / {
-        try_files $uri $uri/ /index.html;            # SPA-Fallback
+    location / {                                   # alles Übrige
+        try_files $uri $uri/ /index.html;          # SPA-Fallback
     }
 }
 ```
 
+| Baustein | Wirkung |
+| --- | --- |
+| `location = /pfad` | gilt genau für diesen Pfad; hat Vorrang vor allen anderen Blöcken |
+| `location ~* "regex"` | gilt für Pfade, auf die der reguläre Ausdruck passt; Anführungszeichen nötig, wenn der Ausdruck `{` enthält |
+| `location /` | Präfix, passt auf alles, was kein anderer Block abdeckt |
+| `try_files $uri $uri/ /index.html` | zuerst Datei, dann Ordner, sonst `index.html` mit Status 200 (SPA-Fallback) |
+| `try_files $uri =404` | Datei oder 404; für Bundles und Bilder, damit Fehlendes nicht als HTML ankommt |
+| `add_header Cache-Control "…"` | Caching-Anweisung an Browser und Proxys |
+
+Welche Datei welche Cache-Regel braucht:
+
 | Datei | Cache-Regel | Grund |
 | --- | --- | --- |
-| `main-….js`, `chunk-….js`, `styles-….css` | 1 Jahr, `immutable` | neuer Inhalt = neuer Dateiname (`outputHashing: "all"`) |
+| `main-….js`, `chunk-….js`, `styles-….css` | 1 Jahr, `immutable` (`public, max-age=31536000, immutable`) | neuer Inhalt = neuer Dateiname (`outputHashing: "all"`) |
 | Bilder aus `public/` | 1 Tag | Dateiname ohne Hash |
 | `index.html` | `no-cache` (immer nachfragen) | verweist auf die aktuellen Bundles |
 | `config.json` | `no-store` | wird beim Containerstart neu geschrieben |
 
-`try_files $uri $uri/ /index.html` prüft zuerst eine Datei, dann einen Ordner, sonst liefert nginx `index.html` mit Status 200. Für Dateien mit Endung gilt `=404`, damit ein fehlendes Bundle nicht als HTML ankommt.
+Angular hängt beim Produktions-Build einen Hash aus 8 Zeichen an den Dateinamen (`main-BRQTNP33.js`); ein regulärer Ausdruck auf `-` plus 8 Buchstaben/Ziffern vor `.js` oder `.css` erkennt solche Dateien.
 
 ## Laufzeitkonfiguration statt Build pro Umgebung
 
-Lab 2.2 lädt `config.json` mit `provideAppInitializer`, bevor die App startet. Im Container schreibt ein Startskript diese Datei aus einer Vorlage und Umgebungsvariablen.
+Lab 2.2 lädt `config.json` mit `provideAppInitializer`, bevor die App startet. Im Container schreibt ein Startskript diese Datei aus einer Vorlage und Umgebungsvariablen. Vorlage und Skript liegen in `workspaces/docker/runtime/`; diese Zeilen der Auslieferungsstufe gibt der Starter vor:
+
+```dockerfile
+COPY docker/runtime/config.template.json /etc/eventhub/config.template.json
+COPY --chmod=755 docker/runtime/40-eventhub-config.sh /docker-entrypoint.d/40-eventhub-config.sh
+# Standardwert, per docker run -e überschreibbar
+ENV API_URL=http://localhost:3000
+```
 
 ```json
 { "apiUrl": "${API_URL}" }
@@ -177,7 +206,7 @@ echo "EventHub: config.json geschrieben (apiUrl=${API_URL})"
 ## Befehle
 
 ```bash
-cd output/project/workspaces
+cd project/workspaces
 docker build -f docker/Dockerfile -t eventhub-web .
 docker run --rm -p 8080:8080 -e API_URL=http://localhost:3000 eventhub-web
 curl -i http://localhost:8080/sessions/3

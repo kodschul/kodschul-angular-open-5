@@ -117,8 +117,8 @@ readonly page = linkedSignal(() => {
   return 1;
 });
 
-page.set(4);          // 4
-filter.set('ngrx');   // page() ist wieder 1
+this.page.set(4);          // 4
+this.filter.set('ngrx');   // page() ist wieder 1
 ```
 
 ## Warum Signals zoneless ermöglichen

@@ -1,12 +1,12 @@
 # Lab 12.3 – Übung: Progressive Web App
 
 **Dauer:** ca. 20 Minuten
-**Ändert die EventHub-Projektbasis?** Nein — die Übung arbeitet in `output/project/workspaces/eventhub-pwa/`; das Ergebnis zum Vergleich liegt in `eventhub-pwa-final/`.
+**Ändert die EventHub-Projektbasis?** Nein — die Übung arbeitet in `project/workspaces/eventhub-pwa/`; das Ergebnis zum Vergleich liegt in `eventhub-pwa-final/`.
 
 ## Vorbereitung
 
-- Terminal 1 im Ordner `output/project/`: `npm run api` (Mock-API auf Port 3000).
-- Terminal 2 im Ordner `output/project/workspaces/eventhub-pwa/`: `npm install`.
+- Terminal 1 im Ordner `project/`: `npm run api` (Mock-API auf Port 3000).
+- Terminal 2 im Ordner `project/workspaces/eventhub-pwa/`: `npm install`.
 - Ausgangszustand: `src/app/app.ts` lädt das Programm per `httpResource` von `http://localhost:3000/sessions`.
 - Browser: Chrome oder Edge mit geöffneten DevTools; Adresse nach Aufgabe 4: http://localhost:8080.
 

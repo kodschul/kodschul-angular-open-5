@@ -84,6 +84,19 @@ flowchart LR
 | „Danach ist alles kaputt.“ | Pipeline und E2E-Tests der wichtigsten Abläufe zuerst; jeder Schritt einzeln rückgängig machbar |
 | „Bringt den Kunden nichts.“ | Baseline vorher/nachher: Lighthouse, Bundle-Größe, Build-Dauer, Zeit pro Release |
 
+## Typische Fehler
+
+Häufige Schwächen in Modernisierungsplänen:
+
+| Symptom | Ursache | Lösung |
+| --- | --- | --- |
+| Maßnahme gilt nie als „fertig“ | Messkriterium wie „Code ist modern“ ist nicht prüfbar | Befehl, Zahl oder Ja/Nein, z. B. „`grep -r 'NgModule' src` liefert 0 Treffer“ |
+| Erste Maßnahme ist ein großer Umbau (z. B. alles auf Signals) | Sicherheitsnetz fehlt; Pipeline und Baseline kommen erst später | CI, Tests der wichtigsten Abläufe und Lighthouse-Baseline an Position 1 |
+| `ng update` von 14 direkt auf 22 geplant | Versionssprung überspringt die automatischen Migrationen der Zwischenversionen | eine Hauptversion pro Schritt, jeweils mit grüner Pipeline |
+| Plan hat zehn Maßnahmen, keine ist begonnen | zu viel auf einmal, kein Nutzen-Risiko-Abgleich | fünf Maßnahmen, nach Nutzen und Risiko sortiert; Rest unter „Bewusst nicht im Plan“ |
+| Maßnahme passt nicht zum Ist-Zustand | Checkliste nicht gegen die App geprüft | Checkliste Zeile für Zeile mit „betroffen / nicht betroffen“ markieren |
+| Aufwand „S“ für eine Maßnahme, die alle Formulare betrifft | Review- und Testaufwand nicht mitgeschätzt | Personentage inklusive Review und Test schätzen |
+
 ## Fazit
 
 - Erst Sicherheitsnetz und Messung, dann Version, dann automatische Migrationen, danach Feature für Feature.

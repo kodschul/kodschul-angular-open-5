@@ -5,8 +5,8 @@
 
 ## Vorbereitung
 
-- Terminal 1 im Ordner `output/project/`: `npm run api`.
-- Terminal 2 im Ordner `output/project/`: `npm start`.
+- Terminal 1 im Ordner `project/`: `npm run api`.
+- Terminal 2 im Ordner `project/`: `npm start`.
 - Arbeitsdatei: `src/app/playground/playground.ts`
 - Starter: `src/app/starters/m04-l02-validators.ts` (typisiertes Formular aus Lab 4.1, Gerüste für `companyEmail` und `workshopsDoNotOverlap`, fertige Hilfsfunktion `overlaps`)
 - Browser: http://localhost:4200/playground, DevTools mit Tab „Network“ (für die Erweiterung)

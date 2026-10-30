@@ -1,12 +1,12 @@
 # Lab 11.1 – Übung: Nx Workspace
 
 **Dauer:** ca. 20 Minuten
-**Ändert die EventHub-Projektbasis?** Nein — die Übung arbeitet im eigenen Workspace `output/project/workspaces/nx-eventhub/`.
+**Ändert die EventHub-Projektbasis?** Nein — die Übung arbeitet im eigenen Workspace `project/workspaces/nx-eventhub/`.
 
 ## Vorbereitung
 
-- Terminal 1 im Ordner `output/project/`: `npm run api` (Mock-API auf Port 3000).
-- Terminal 2 im Ordner `output/project/workspaces/nx-eventhub/`: `npm install` (einmalig, ca. 1 Minute).
+- Terminal 1 im Ordner `project/`: `npm run api` (Mock-API auf Port 3000).
+- Terminal 2 im Ordner `project/workspaces/nx-eventhub/`: `npm install` (einmalig, ca. 1 Minute).
 - Ausgangszustand: App `eventhub` mit `apps/eventhub/src/app/sessions/session-list.ts` und `session-card.ts`, Library `models` (`libs/shared/models`).
 - Browser: http://localhost:4210 (Dev-Server der Nx-App; die Kurs-App auf Port 4200 darf weiterlaufen).
 
